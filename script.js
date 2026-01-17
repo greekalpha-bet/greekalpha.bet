@@ -454,9 +454,10 @@ function openModal(item){
   note.textContent = locales[currentLang].note;
   modalBody.appendChild(note);
 
-  backdrop.hidden = false;
-  backdrop.setAttribute("aria-hidden", "false");
-  closeBtn.focus();
+    if (closeBtn) closeBtn.addEventListener("click", closeModal);
+    backdrop.hidden = false;
+    backdrop.setAttribute("aria-hidden", "false");
+    if (closeBtn && typeof closeBtn.focus === 'function') closeBtn.focus();
 }
 
 function closeModal(){
@@ -465,7 +466,7 @@ function closeModal(){
   if (lastFocusEl && typeof lastFocusEl.focus === "function") lastFocusEl.focus();
 }
 
-closeBtn.addEventListener("click", closeModal);
+if (closeBtn) closeBtn.addEventListener("click", closeModal);
 backdrop.addEventListener("click", (e) => {
   if (e.target === backdrop) closeModal();
 });
