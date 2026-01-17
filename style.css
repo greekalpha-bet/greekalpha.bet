@@ -478,7 +478,12 @@ html,body{
   display:flex;
   align-items:center;
   gap:12px;
-  font-family: 'Cinzel', 'GFS Didot', Georgia, serif;
+  /* Use a humanist sans as an equivalent to Segoe UI for small footer text
+     and ensure only initials are capitalized (no forced small-caps). */
+  font-family: Inter, 'Segoe UI', system-ui, -apple-system, Roboto, Arial, sans-serif;
+  /*text-transform: capitalize; /* make initials uppercase only */
+  font-variant-caps: normal;
+  font-feature-settings: "smcp" 0, "c2sc" 0;
 }
 .site-footer a{ color: var(--muted); text-decoration: underline; }
 
