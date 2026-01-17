@@ -511,10 +511,10 @@ function updateFooterLogo(theme){
     const logo = document.querySelector('.powered-by-logo');
     if (!logo) return;
     if (theme === 'light'){
-      logo.src = '/assets/mk-logo-black-300x.png';
+      logo.src = 'assets/mk-logo-black-300x.png';
       logo.alt = 'Powered by MK (dark text)';
     } else {
-      logo.src = '/assets/mk-logo-white-300x.png';
+      logo.src = 'assets/mk-logo-white-300x.png';
       logo.alt = 'Powered by MK (light text)';
     }
   }catch(e){/* ignore */}
