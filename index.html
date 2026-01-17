@@ -58,7 +58,15 @@
   }
   </script>
 
-    <!-- Google tag (gtag.js) -->
+  <!-- Google tag (gtag.js) -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-LGW2XK4ZKC"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+
+    gtag('config', 'G-LGW2XK4ZKC');
+  </script>
   <script>
     // Disable tracking if consent cookie not present
     if (document.cookie.indexOf('cookies_consent=true') === -1) {
@@ -72,30 +80,22 @@
   <script async src="https://www.googletagmanager.com/gtag/js?id=G-NCGKDHE0Y6"></script>
 </head>
 <body>
-  <header class="site-header">
-    <div class="header-controls">
-      <button id="langToggle" class="lang-toggle ui-top-btn" aria-haspopup="true" aria-expanded="false" aria-label="Switch language">
-        <img id="langIcon" src="./assets/language.png" alt="Language" />
-      </button>
-
-      <button id="printBtn" class="print-toggle ui-top-btn" aria-label="Print page">
-        <img id="printIcon" src="./assets/printer.png" alt="Print" />
-      </button>
-
-      <button id="audioBtn" class="audio-toggle ui-top-btn" aria-pressed="false" aria-label="Pronunciar alfabeto" title="Pronunciar alfabeto">
-        <img id="audioIcon" src="./assets/audio.png" alt="Play audio" />
-      </button>
-
-      <button id="themeToggle" class="theme-toggle ui-top-btn" aria-pressed="false" aria-label="Toggle theme">
-        <img id="themeIcon" src="./assets/theme-swap.png" alt="Swap theme" />
-      </button>
-
-      <div id="langMenu" class="lang-menu" role="menu" hidden>
-        <button class="lang-item" data-lang="en" role="menuitem">English (EN)</button>
-        <button class="lang-item" data-lang="pt-BR" role="menuitem">Português (PT)</button>
-      </div>
-    </div>
-  </header>
+  <button id="langToggle" class="lang-toggle ui-top-btn" aria-haspopup="true" aria-expanded="false" aria-label="Switch language">
+    <img id="langIcon" src="./assets/language.png" alt="Language" />
+  </button>
+  <div id="langMenu" class="lang-menu" role="menu" hidden>
+    <button class="lang-item" data-lang="en" role="menuitem">English (EN)</button>
+    <button class="lang-item" data-lang="pt-BR" role="menuitem">Português (PT)</button>
+  </div>
+  <button id="printBtn" class="print-toggle ui-top-btn" aria-label="Print page">
+    <img id="printIcon" src="./assets/printer.png" alt="Print" />
+  </button>
+  <button id="audioBtn" class="audio-toggle ui-top-btn" aria-pressed="false" aria-label="Pronunciar alfabeto" title="Pronunciar alfabeto">
+    <img id="audioIcon" src="./assets/audio.png" alt="Play audio" />
+  </button>
+  <button id="themeToggle" class="theme-toggle ui-top-btn" aria-pressed="false" aria-label="Toggle theme">
+    <img id="themeIcon" src="./assets/theme-swap.png" alt="Swap theme" />
+  </button>
   <main class="wrap">
     <div class="stage">
       <section class="chart" id="chart" aria-label="Greek alphabet table"></section>
@@ -129,24 +129,5 @@
     </footer>
 
   <script src="./script.js"></script>
-  <!-- Ads modal (similar to Carbon Ads) -->
-  <div id="adsBackdrop" class="ads-backdrop" hidden>
-    <div class="ads-modal" role="dialog" aria-modal="true" aria-label="Advertisement">
-      <button class="ads-close" aria-label="Close ad">×</button>
-      <div class="ads-body">
-        <div class="ads-left">
-          <img src="./assets/ads-logo.png" alt="Sponsor" class="ads-logo" onerror="this.style.display='none'" />
-        </div>
-        <div class="ads-main">
-          <div class="ads-title">Sponsored — Try a faster workflow</div>
-          <div class="ads-desc">Boost your study sessions with curated Greek-letter flashcards and timed drills. Save 20% with code GREEK20.</div>
-          <a href="https://example.com" target="_blank" rel="noopener noreferrer" class="ads-cta">Learn more</a>
-        </div>
-      </div>
-      <div class="ads-footer">
-        <label class="ads-dismiss-label"><input type="checkbox" id="adsDontShow" /> Don't show again for 7 days</label>
-      </div>
-    </div>
-  </div>
 </body>
 </html>
