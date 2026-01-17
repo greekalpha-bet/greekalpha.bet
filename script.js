@@ -537,6 +537,28 @@ if (themeToggle){
   });
 }
 
+/* Audio pronunciation button: play/pause the alphabet MP3 */
+const audioBtn = document.getElementById('audioBtn');
+let alphabetAudio = null;
+try{
+  alphabetAudio = new Audio('./assets/audio/greek-alphabet-pronunciation.mp3');
+  alphabetAudio.preload = 'auto';
+}catch(e){ alphabetAudio = null; }
+
+if (audioBtn){
+  audioBtn.addEventListener('click', () => {
+    if (!alphabetAudio) return;
+    if (alphabetAudio.paused){
+      alphabetAudio.currentTime = 0;
+      alphabetAudio.play().catch(()=>{});
+      audioBtn.setAttribute('aria-pressed','true');
+    } else {
+      alphabetAudio.pause();
+      audioBtn.setAttribute('aria-pressed','false');
+    }
+  });
+}
+
 /* Language toggle: persist and apply en / pt-BR */
 const locales = {
   'en': {
@@ -573,8 +595,17 @@ function applyLanguage(lang){
   currentLang = lang;
   document.documentElement.lang = lang;
   if (langToggle){
-    langToggle.textContent = locales[lang].langBtn;
+    // keep aria state useful for assistive tech
     langToggle.setAttribute('aria-pressed', String(lang === 'en'));
+    langToggle.setAttribute('aria-expanded', 'false');
+  }
+  // update language menu active state if present
+  const langMenu = document.getElementById('langMenu');
+  if (langMenu){
+    Array.from(langMenu.querySelectorAll('.lang-item')).forEach(btn => {
+      if (btn.dataset.lang === lang) btn.setAttribute('aria-checked','true');
+      else btn.removeAttribute('aria-checked');
+    });
   }
   if (themeToggle) themeToggle.setAttribute('aria-label', locales[lang].themeToggleLabel);
   if (document.getElementById('themeIcon')) document.getElementById('themeIcon').alt = locales[lang].themeIconAlt;
@@ -592,11 +623,54 @@ if (savedLang && locales[savedLang]){
 }
 
 if (langToggle){
-  langToggle.addEventListener('click', () => {
-    const next = document.documentElement.lang === 'en' ? 'pt-BR' : 'en';
-    applyLanguage(next);
-    localStorage.setItem('lang', next);
+  const langMenu = document.getElementById('langMenu');
+  // toggle menu visibility
+  langToggle.addEventListener('click', (e) => {
+    if (!langMenu) return;
+    const open = !(langMenu.hasAttribute('hidden'));
+    if (open){
+      langMenu.setAttribute('hidden','');
+      langToggle.setAttribute('aria-expanded','false');
+    } else {
+      langMenu.removeAttribute('hidden');
+      langToggle.setAttribute('aria-expanded','true');
+      // focus first item
+      const first = langMenu.querySelector('.lang-item');
+      if (first) first.focus();
+    }
   });
+
+  // clicking outside closes menu
+  document.addEventListener('click', (e) => {
+    if (!langMenu) return;
+    const target = e.target;
+    if (!langMenu.contains(target) && target !== langToggle && !langToggle.contains(target)){
+      langMenu.setAttribute('hidden','');
+      langToggle.setAttribute('aria-expanded','false');
+    }
+  });
+
+  // language selection
+  if (langMenu){
+    Array.from(langMenu.querySelectorAll('.lang-item')).forEach(btn => {
+      btn.addEventListener('click', () => {
+        const next = btn.dataset.lang || 'en';
+        applyLanguage(next);
+        localStorage.setItem('lang', next);
+        langMenu.setAttribute('hidden','');
+        langToggle.setAttribute('aria-expanded','false');
+      });
+    });
+
+    // keyboard: Esc closes
+    langMenu.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape'){
+        langMenu.setAttribute('hidden','');
+        langToggle.setAttribute('aria-expanded','false');
+        langToggle.focus();
+      }
+    });
+  }
 }
 
 if (printBtn){

@@ -221,14 +221,52 @@ html,body{
 :root .theme-toggle img{ filter: invert(1) contrast(1.05) brightness(1.05); }
 [data-theme="light"] .theme-toggle img{ filter: none; }
 
+/* Audio icon: match theme colors like the theme-toggle */
+:root .audio-toggle img{ filter: invert(1) contrast(1.05) brightness(1.05); }
+[data-theme="light"] .audio-toggle img{ filter: none; }
+
+/* Language icon: same treatment as other icons */
+:root .lang-toggle img{ filter: invert(1) contrast(1.05) brightness(1.05); }
+[data-theme="light"] .lang-toggle img{ filter: none; }
+
 /* Language toggle (left of theme toggle) */
 .lang-toggle{
-  right: calc(16px + var(--btn-gap) * 2);
+  right: calc(16px + var(--btn-gap) * 3);
 }
 
-/* Print toggle (between language and theme) */
+/* Language dropdown menu */
+.lang-menu{
+  position:fixed;
+  right: calc(16px + var(--btn-gap) * 3);
+  top: 56px;
+  background: var(--modal-bg);
+  border: 1px solid var(--modal-border);
+  border-radius: 10px;
+  padding: 6px;
+  display:flex;
+  flex-direction:column;
+  gap:6px;
+  z-index:1200;
+}
+.lang-menu[hidden]{ display:none; }
+.lang-item{
+  background:transparent;
+  border:none;
+  color:var(--muted-high);
+  padding:8px 12px;
+  text-align:left;
+  cursor:pointer;
+  border-radius:8px;
+  font-family: system-ui, -apple-system, 'Segoe UI', Roboto, Arial, sans-serif;
+}
+.lang-item:hover, .lang-item:focus{ background: var(--control-hover); outline: none; }
+
+/* Audio pronunciation button */
+.audio-toggle{ right: calc(16px + var(--btn-gap) * 1); }
+
+/* Print toggle */
 .print-toggle{
-  right: calc(16px + var(--btn-gap));
+  right: calc(16px + var(--btn-gap) * 2);
 }
 
 /* ensure theme button aligns with the others */
@@ -334,6 +372,7 @@ html,body{
   .theme-toggle{ right:12px; top:12px; }
   .print-toggle{ right:12px; top: 56px; }
   .lang-toggle{ right:12px; top: 100px; }
+  .audio-toggle{ right:12px; top: 34px; }
   .ui-top-btn img{ width:16px; height:16px; }
 }
 

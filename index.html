@@ -71,9 +71,18 @@
   <script async src="https://www.googletagmanager.com/gtag/js?id=G-NCGKDHE0Y6"></script>
 </head>
 <body>
-  <button id="langToggle" class="lang-toggle ui-top-btn" aria-pressed="false" aria-label="Switch language">EN</button>
+  <button id="langToggle" class="lang-toggle ui-top-btn" aria-haspopup="true" aria-expanded="false" aria-label="Switch language">
+    <img id="langIcon" src="./assets/language.png" alt="Language" />
+  </button>
+  <div id="langMenu" class="lang-menu" role="menu" hidden>
+    <button class="lang-item" data-lang="en" role="menuitem">English (EN)</button>
+    <button class="lang-item" data-lang="pt-BR" role="menuitem">Português (PT)</button>
+  </div>
   <button id="printBtn" class="print-toggle ui-top-btn" aria-label="Print page">
     <img id="printIcon" src="./assets/printer.png" alt="Print" />
+  </button>
+  <button id="audioBtn" class="audio-toggle ui-top-btn" aria-pressed="false" aria-label="Pronunciar alfabeto" title="Pronunciar alfabeto">
+    <img id="audioIcon" src="./assets/audio.png" alt="Play audio" />
   </button>
   <button id="themeToggle" class="theme-toggle ui-top-btn" aria-pressed="false" aria-label="Toggle theme">
     <img id="themeIcon" src="./assets/theme-swap.png" alt="Swap theme" />
