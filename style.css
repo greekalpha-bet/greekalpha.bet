@@ -1,0 +1,456 @@
+:root{
+  --bg: #0b0e14;
+  --ink: #eef2f7;
+  --muted: rgba(238,242,247,.62);
+  --muted2: rgba(238,242,247,.48);
+  --rule: rgba(255,255,255,.10);
+  --blue: rgba(122,162,255,.85);
+
+  --card: rgba(255,255,255,.04);
+  --card2: rgba(255,255,255,.06);
+
+  --modal-bg: rgba(15,18,28,.92);
+  --modal-border: rgba(255,255,255,.10);
+  --backdrop-bg: rgba(0,0,0,.55);
+  --control-bg: rgba(255,255,255,.06);
+  --control-hover: rgba(255,255,255,.10);
+  --muted-high: rgba(238,242,247,.86);
+  --muted-med: rgba(238,242,247,.72);
+
+  --padX: 26px;
+  --padY: 18px;
+  --btn-gap: 56px; /* horizontal gap between top-right buttons */
+}
+
+*{ box-sizing:border-box; }
+
+html,body{
+  height:100%;
+  width:100%;
+  margin:0;
+  background:var(--bg);
+  color:var(--ink);
+  overflow:hidden; /* sem barra de rolagem da página */
+}
+
+.wrap{
+  height:100svh;
+  width:100vw;
+  padding: var(--padY) var(--padX);
+  display:flex;
+  align-items:center;
+  justify-content:center;
+}
+
+.stage{ position:relative; width:100%; height:100%; }
+
+.chart{
+  transform-origin: top left;
+  will-change: transform;
+
+  position:absolute;
+  left:0; top:0;
+}
+
+.row{
+  display:grid;
+  grid-template-columns: repeat(6, 1fr);
+}
+
+.cell{
+  padding: 10px 0 22px;
+  min-height: 250px;
+  position:relative;
+  cursor:pointer;
+  user-select:none;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.cell > *{ position:relative; z-index:1; }
+
+/* Hover “card glow” sem alterar layout */
+.cell::after{
+  content:"";
+  position:absolute;
+  inset: 8px 12px 12px 12px;
+  border-radius: 16px;
+  background: linear-gradient(180deg, var(--card2), transparent);
+  box-shadow:
+    inset 0 0 0 1px rgba(255,255,255,.08),
+    0 16px 26px rgba(0,0,0,.35);
+  opacity:0;
+  transform: translateY(0);
+  transition: opacity .18s ease, transform .18s ease;
+}
+
+.cell:hover::after{
+  opacity:1;
+  transform: translateY(-1px);
+}
+
+/* Um “focus” bonito para teclado */
+.cell:focus-visible{
+  outline: 2px solid rgba(122,162,255,.55);
+  outline-offset: 6px;
+  border-radius: 16px;
+}
+
+.glyph{
+  font-family: "GFS Didot", serif;
+  font-size: 112px;
+  line-height: 1;
+  letter-spacing: -0.01em;
+  margin-bottom: 16px;
+  color: var(--ink);
+}
+
+.meta{
+  display:flex;
+  flex-direction:column;
+  gap: 6px;
+}
+
+.latin{
+  display:flex;
+  align-items:baseline;
+  gap: 10px;
+  white-space:nowrap;
+}
+
+.name{
+  font-family: "Cinzel", serif;
+  font-weight: 600;
+  font-size: 14px;
+  letter-spacing: 0.10em;
+  color: var(--blue);
+}
+
+.ipa{
+  font-family: "GFS Didot", serif;
+  font-size: 16px;
+  color: var(--muted2);
+}
+
+.greek{
+  font-family: "GFS Didot", serif;
+  font-style: italic;
+  font-size: 18px;
+  color: var(--muted);
+}
+
+.rule{
+  height: 1px;
+  background: var(--rule);
+  margin: 8px 0 12px;
+}
+
+/* ---------- MODAL ---------- */
+.backdrop{
+  position:fixed;
+  inset:0;
+  background: var(--backdrop-bg);
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  padding: 16px;
+  z-index: 999;
+}
+
+.backdrop[hidden]{
+  display: none !important;
+}
+
+
+.modal{
+  width: min(860px, 96vw);
+  max-height: 92svh;
+  overflow:auto; /* se precisar, rola só aqui dentro */
+  background: var(--modal-bg);
+  backdrop-filter: blur(10px);
+  border: 1px solid var(--modal-border);
+  border-radius: 22px;
+  box-shadow: 0 30px 90px rgba(0,0,0,.55);
+  padding: 18px 18px 16px;
+  position:relative;
+}
+
+.close{
+  position:absolute;
+  top: 10px;
+  right: 12px;
+  width: 42px;
+  height: 42px;
+  border-radius: 14px;
+  border: 1px solid var(--modal-border);
+  background: var(--control-bg);
+  color: var(--ink);
+  font-size: 26px;
+  line-height: 1;
+  cursor:pointer;
+}
+
+.close:hover{
+  background: var(--control-hover);
+}
+
+/* Theme toggle button */
+
+/* Shared top-right UI button styles */
+.ui-top-btn{
+  position:fixed;
+  top: 16px;
+  z-index:1100;
+  width:44px;
+  height:44px;
+  border-radius:12px;
+  border: transparent;
+  background: transparent;
+  color: var(--ink);
+  font-size:18px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  cursor:pointer;
+}
+
+.ui-top-btn:hover{ filter:brightness(1.05); }
+
+.ui-top-btn img{ width:20px; height:20px; display:block; }
+
+/* Icon color adjustments: make icon light on dark background, normal on light */
+:root .theme-toggle img{ filter: invert(1) contrast(1.05) brightness(1.05); }
+[data-theme="light"] .theme-toggle img{ filter: none; }
+
+/* Language toggle (left of theme toggle) */
+.lang-toggle{
+  right: calc(16px + var(--btn-gap) * 2);
+}
+
+/* Print toggle (between language and theme) */
+.print-toggle{
+  right: calc(16px + var(--btn-gap));
+}
+
+/* ensure theme button aligns with the others */
+.theme-toggle{ right: 16px; }
+
+.print-toggle img{ width:18px; height:18px; display:block; }
+
+/* Force printer icon to pure white in dark theme and pure black in light theme */
+:root .print-toggle img{
+  /* dark theme: grayscale then invert to produce white */
+  filter: grayscale(1) invert(1) brightness(3.8) !important;
+}
+[data-theme="light"] .print-toggle img{
+  /* light theme: grayscale and darken to black */
+  filter: grayscale(1) brightness(0) !important;
+}
+
+.cell::after{ display:none; }
+
+.modal-head{
+  display:flex;
+  gap: 14px;
+  align-items:center;
+  padding-right: 44px; /* espaço do X */
+}
+
+.big-glyph{
+  font-family: "GFS Didot", serif;
+  font-size: 92px;
+  line-height: 1;
+  padding: 6px 14px;
+  border-radius: 18px;
+}
+
+.modal-title{
+  font-family: "Cinzel", serif;
+  letter-spacing: .12em;
+  font-weight: 600;
+  font-size: 18px;
+  color: var(--blue);
+  margin-bottom: 6px;
+}
+
+.modal-sub{
+  font-family: "GFS Didot", serif;
+  font-size: 18px;
+  color: var(--muted);
+  background: var(--modal-bg);
+  backdrop-filter: blur(10px);
+  border: 1px solid var(--modal-border);
+  margin-top: 14px;
+  display:grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 12px;
+}
+
+.block{
+  border: none;                 /* remove a borda */
+  background: transparent;      /* mesma cor do fundo do modal */
+  padding: 12px 12px 10px;
+  border-radius: 18px;
+}
+
+.block h3{
+  margin: 0 0 8px;
+  font-family: "Cinzel", serif;
+  letter-spacing: .08em;
+  font-size: 13px;
+  color: var(--muted-high);
+}
+
+.block ul{
+  margin: 0;
+  padding-left: 18px;
+  color: var(--muted-med);
+  font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+  font-size: 14px;
+  line-height: 1.4;
+}
+
+.note{
+  grid-column: 1 / -1;
+  color: rgba(238,242,247,.55);
+  font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+  font-size: 13px;
+  margin-top: 2px;
+}
+
+@media (max-width: 900px){
+  :root{ --padX: 14px; --padY: 12px; }
+  .glyph{ font-size: 102px; }
+  .cell{ min-height: 235px; }
+  .modal-body{ grid-template-columns: 1fr; }
+  .big-glyph{ font-size: 82px; }
+}
+@media (max-width: 520px){
+  :root{ --padX: 10px; --padY: 10px; }
+  .glyph{ font-size: 96px; }
+  .cell{ min-height: 220px; }
+
+  /* Mobile: stack the top-right buttons vertically and reduce sizes */
+  .ui-top-btn{ width:40px; height:40px; top:auto; }
+  .theme-toggle{ right:12px; top:12px; }
+  .print-toggle{ right:12px; top: 56px; }
+  .lang-toggle{ right:12px; top: 100px; }
+  .ui-top-btn img{ width:16px; height:16px; }
+}
+
+/* Light theme overrides */
+[data-theme="light"]{
+  --bg: #fcf7f0;
+  --ink: #0b0e14;
+  --muted: rgba(11,14,20,.62);
+  --muted2: rgba(11,14,20,.48);
+  --rule: rgba(11,14,20,.08);
+  --blue: rgba(21,90,255,.95);
+
+  --card: rgba(11,14,20,.03);
+  --card2: rgba(11,14,20,.04);
+  --modal-bg: rgba(255,255,255,.98);
+  --modal-border: rgba(11,14,20,.06);
+  --backdrop-bg: rgba(0,0,0,.22);
+  --control-bg: rgba(11,14,20,.04);
+  --control-hover: rgba(11,14,20,.06);
+  --muted-high: rgba(11,14,20,.86);
+  --muted-med: rgba(11,14,20,.72);
+}
+
+/* ---------- PRINT: landscape optimization ---------- */
+@media print{
+  @page { size: landscape; margin: 12mm; }
+
+  html,body{
+    background: #fff !important;
+    color: #000 !important;
+    height: auto;
+    overflow: visible;
+  }
+
+  /* hide interactive UI */
+  .theme-toggle, .lang-toggle, .print-toggle, .backdrop, .close, .note, .theme-toggle img { display: none !important; }
+
+  /* make the content use full printable width and constrain to a single page */
+  @page { size: A4 landscape; }
+  .wrap{ padding: 8mm !important; height: 210mm !important; width: 297mm !important; box-sizing: border-box; }
+  html, body { width: 297mm !important; height: 210mm !important; }
+  .stage, .chart{ position: static !important; transform: none !important; left: auto !important; top: auto !important; width: 100% !important; }
+
+  /* keep grid and make cells printable */
+  /* force a single-sheet layout: avoid page breaks and tighten spacing */
+  .row{ grid-template-columns: repeat(6, 1fr) !important; gap: 6mm; }
+  .cell{
+    min-height: 72px !important;
+    padding: 6mm !important;
+    background: transparent !important;
+    box-shadow: none !important;
+    border-radius: 6px !important;
+    border: 1px solid #ddd !important;
+    color: #000 !important;
+    page-break-inside: avoid;
+    break-inside: avoid;
+    overflow: hidden;
+  }
+
+  /* reduce glyph size to help fit on single page */
+  .glyph{ font-size: 48px !important; line-height:1 !important; color: #000 !important; }
+  .name, .ipa, .greek, .modal-title, .modal-sub, .block h3, .block ul{ color: #000 !important; }
+
+  /* hide modal overlay in print */
+  .modal, .backdrop{ display: none !important; }
+
+  /* rules and separators */
+  .rule{ background: #ccc !important; height: 1px; margin: 6mm 0; }
+
+  /* ensure images print correctly */
+  img{ -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+}
+
+/* Footer styling */
+.site-footer{
+  position:fixed;
+  bottom:10px;
+  left: 0;
+  right: 0;
+  display:flex;
+  justify-content:center;
+  pointer-events:none; /* let clicks pass through */
+}
+.site-footer-inner{
+  pointer-events:auto;
+  background: transparent;
+  color: var(--muted);
+  font-size: 12px;
+  padding: 6px 12px;
+  border-radius: 8px;
+  display:flex;
+  align-items:center;
+  gap:12px;
+  font-family: 'Cinzel', 'GFS Didot', Georgia, serif;
+}
+.site-footer a{ color: var(--muted); text-decoration: underline; }
+
+.powered-by{ display:block; }
+.powered-by-logo{ max-width:200px; width:100%; height:auto; display:block; }
+
+.powered-text{ font-size:12px; color:var(--muted); margin-right:6px; }
+.powered-text strong{ font-weight:600; }
+
+/* ensure the footer doesn't overlap page content on small screens */
+@media (max-width:420px){
+  .site-footer{ bottom:6px; }
+  .site-footer-inner{ padding:6px 8px; gap:8px; }
+  .powered-by-logo{ max-width:140px; }
+}
+
+/* Prevent fixed footer from overlapping page content */
+.wrap{ padding-bottom: 100px; }
+
+@media (max-width:420px){
+  .wrap{ padding-bottom: 160px; }
+}
+
+@media print{
+  .site-footer{ display:none !important; }
+}
