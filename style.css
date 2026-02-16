@@ -366,26 +366,39 @@ html,body{
   :root{ --padX: 10px; --padY: 10px; }
   .glyph{ font-size: 96px; }
   .cell{ min-height: 220px; }
-
-  /* Mobile: stack the top-right buttons vertically and reduce sizes */
-  .ui-top-btn{ width:40px; height:40px; top:auto; }
-  .theme-toggle{ right:12px; top:12px; }
-  .print-toggle{ right:12px; top: 56px; }
-  .lang-toggle{ right:12px; top: 100px; }
-  .audio-toggle{ right:12px; top: 34px; }
+  /* Mobile: make top buttons smaller and center them horizontally in the header */
+  .ui-top-btn{ width:40px; height:40px; top:12px; }
   .ui-top-btn img{ width:16px; height:16px; }
 
-  /* Center the top buttons horizontally on small screens without changing desktop layout */
-  #themeToggle, #audioBtn, #printBtn, #langToggle {
+  /* layout: lang | print | audio | theme (left to right) centered in header */
+  #langToggle, #printBtn, #audioBtn, #themeToggle {
     position: fixed;
     top: 12px;
     z-index: 2000;
   }
-  /* layout: lang | print | audio | theme (left to right) centered */
   #langToggle { left: calc(50% - (var(--btn-gap) * 1.5)); transform: translateX(-50%); }
   #printBtn  { left: calc(50% - (var(--btn-gap) * 0.5)); transform: translateX(-50%); }
   #audioBtn  { left: calc(50% + (var(--btn-gap) * 0.5)); transform: translateX(-50%); }
   #themeToggle{ left: calc(50% + (var(--btn-gap) * 1.5)); transform: translateX(-50%); }
+  /* ensure the language menu follows the centered lang button on mobile */
+  .lang-menu{ left: calc(50% - (var(--btn-gap) * 1.5)); transform: translateX(-50%); right: auto; top: 56px; }
+}
+
+/* Also stack buttons for slightly larger small screens (tablets, narrow laptops) */
+@media (min-width: 521px){
+  #themeToggle, #audioBtn, #printBtn, #langToggle {
+    position: fixed;
+    right: 12px;
+    z-index: 2000;
+  }
+  #themeToggle{ top: 12px; }
+  #audioBtn{ top: 64px; }
+  #printBtn{ top: 116px; }
+  #langToggle{ top: 168px; }
+  .ui-top-btn{ width:40px; height:40px; }
+  .ui-top-btn img{ width:16px; height:16px; }
+  /* language menu should align with the fixed right-side lang button on desktop */
+  .lang-menu{ right: 12px; left: auto; top: 216px; transform: none; }
 }
 
 /* Light theme overrides */
@@ -420,7 +433,7 @@ html,body{
   }
 
   /* hide interactive UI */
-  .theme-toggle, .lang-toggle, .print-toggle, .backdrop, .close, .note, .theme-toggle img { display: none !important; }
+  .theme-toggle, .lang-toggle, .print-toggle, .audio-toggle, .backdrop, .close, .note, .theme-toggle img, .audio-toggle img { display: none !important; }
 
   /* make the content use full printable width and constrain to a single page */
   @page { size: A4 landscape; }

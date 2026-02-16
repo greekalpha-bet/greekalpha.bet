@@ -385,10 +385,14 @@ function fitToScreen(){
   chart.style.top = "0";
 
   const cs = getComputedStyle(wrap);
-  const padX = parseFloat(cs.paddingLeft) + parseFloat(cs.paddingRight);
+  const padLeft = parseFloat(cs.paddingLeft) || 0;
+  const padRight = parseFloat(cs.paddingRight) || 0;
   const padY = parseFloat(cs.paddingTop) + parseFloat(cs.paddingBottom);
 
-  const availW = window.innerWidth - padX;
+  // On desktop/notebook widths the top-right buttons are fixed/overlayed and
+  // should not reserve layout space. Only subtract left padding there so the
+  // chart centers across the viewport without being pushed by the UI.
+  const availW = window.innerWidth - (window.innerWidth >= 521 ? padLeft : (padLeft + padRight));
   const availH = window.innerHeight - padY;
 
   const rect = chart.getBoundingClientRect();
