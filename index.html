@@ -1,0 +1,122 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Greek Alphabet — Study & Memorize Greek Letters for STEM | greekalpha.bet</title>
+
+  <meta name="description" content="Interactive Greek alphabet study tool for STEM students — learn glyphs, pronunciations, and common math/stat usages to memorize Greek letters quickly." />
+  <meta name="keywords" content="Greek alphabet, memorize greek letters, greek letters for math, greek letters for statistics, greek pronunciation, STEM study" />
+  <meta name="author" content="greekalpha.bet" />
+  <meta name="robots" content="index, follow" />
+  <link rel="canonical" href="https://greekalpha.bet/" />
+  <meta name="theme-color" content="#0b0e14" />
+
+  <!-- Open Graph -->
+  <meta property="og:type" content="website" />
+  <meta property="og:title" content="Greek Alphabet — Study & Memorize Greek Letters for STEM" />
+  <meta property="og:description" content="Interactive Greek alphabet study tool for STEM students — learn glyphs, pronunciations, and common math/stat usages to memorize Greek letters quickly." />
+  <meta property="og:url" content="https://greekalpha.bet/" />
+  <meta property="og:site_name" content="greekalpha.bet" />
+  <meta property="og:image" content="https://greekalpha.bet/theme-swap.png" />
+
+  <!-- Twitter Card -->
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="Greek Alphabet — Study & Memorize Greek Letters for STEM" />
+  <meta name="twitter:description" content="Interactive Greek alphabet study tool for STEM students — learn glyphs, pronunciations, and common math/stat usages to memorize Greek letters quickly." />
+  <meta name="twitter:image" content="https://greekalpha.bet/theme-swap.png" />
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600&family=GFS+Didot:ital@0;1&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
+
+  <link rel="icon" href="./assets/favicon.png" type="image/png">
+  <link rel="stylesheet" href="./style.css" />
+
+    <!-- Google tag (gtag.js) -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-LGW2XK4ZKC"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+
+    gtag('config', 'G-LGW2XK4ZKC');
+  </script>
+
+  <!-- Structured data: WebSite / WebPage -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@graph": [
+      {
+        "@type": "WebSite",
+        "@id": "https://greekalpha.bet/#website",
+        "url": "https://greekalpha.bet/",
+        "name": "greekalpha.bet",
+        "inLanguage": "en"
+      },
+      {
+        "@type": "WebPage",
+        "@id": "https://greekalpha.bet/#webpage",
+        "url": "https://greekalpha.bet/",
+        "name": "Greek Alphabet — Study & Memorize Greek Letters for STEM",
+        "description": "Interactive Greek alphabet study tool for STEM students — learn glyphs, pronunciations, and common math/stat usages to memorize Greek letters quickly.",
+        "inLanguage": "en"
+      }
+    ]
+  }
+  </script>
+</head>
+<body>
+  <button id="langToggle" class="lang-toggle ui-top-btn" aria-haspopup="true" aria-expanded="false" aria-label="Switch language">
+    <img id="langIcon" src="./assets/language.png" alt="Language" />
+  </button>
+  <div id="langMenu" class="lang-menu" role="menu" hidden>
+    <button class="lang-item" data-lang="en" role="menuitem">English (EN)</button>
+    <button class="lang-item" data-lang="pt-BR" role="menuitem">Português (PT)</button>
+  </div>
+  <button id="printBtn" class="print-toggle ui-top-btn" aria-label="Print page">
+    <img id="printIcon" src="./assets/printer.png" alt="Print" />
+  </button>
+  <button id="audioBtn" class="audio-toggle ui-top-btn" aria-pressed="false" aria-label="Pronunciar alfabeto" title="Pronunciar alfabeto">
+    <img id="audioIcon" src="./assets/audio.png" alt="Play audio" />
+  </button>
+  <button id="themeToggle" class="theme-toggle ui-top-btn" aria-pressed="false" aria-label="Toggle theme">
+    <img id="themeIcon" src="./assets/theme-swap.png" alt="Swap theme" />
+  </button>
+  <main class="wrap">
+    <div class="stage">
+      <section class="chart" id="chart" aria-label="Greek alphabet table"></section>
+    </div>
+  </main>
+
+  <!-- Modal (overlay) -->
+  <div class="backdrop" id="backdrop" hidden aria-hidden="true">
+    <div class="modal" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
+
+      <div class="modal-head">
+        <div class="big-glyph" id="bigGlyph">Αα</div>
+        <div class="head-meta">
+          <div class="modal-title" id="modalTitle">ALPHA</div>
+          <div class="modal-sub" id="modalSub">ἄλφα · [a]</div>
+        </div>
+      </div>
+
+      <div class="modal-body" id="modalBody"></div>
+    </div>
+  </div>
+
+    <footer class="site-footer" role="contentinfo">
+      <div class="site-footer-inner">
+        <small>© 2026 greekalpha.bet — <a href="https://raw.githubusercontent.com/greekalpha-bet/greekalpha.bet/refs/heads/main/LICENSE">MIT License</a></small>
+        <div class="powered-by" aria-hidden="false">
+          <span class="powered-text"><strong>Powered</strong> by</span>
+          <img src="assets/mk-logo-white-300x.png" alt="Powered by MK" class="powered-by-logo" />
+        </div>
+      </div>
+    </footer>
+
+  <script src="./script.js"></script>
+</body>
+</html>
