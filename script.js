@@ -387,13 +387,11 @@ function fitToScreen(){
   const cs = getComputedStyle(wrap);
   const padLeft = parseFloat(cs.paddingLeft) || 0;
   const padRight = parseFloat(cs.paddingRight) || 0;
-  const padY = parseFloat(cs.paddingTop) + parseFloat(cs.paddingBottom);
+  const padTop = parseFloat(cs.paddingTop) || 0;
+  const padBottom = parseFloat(cs.paddingBottom) || 0;
 
-  // Both padLeft and padRight are respected so the chart never renders under
-  // the fixed buttons (right side on desktop, top area on mobile is handled
-  // via padY since padding-top is set in the mobile media query).
   const availW = window.innerWidth - padLeft - padRight;
-  const availH = window.innerHeight - padY;
+  const availH = window.innerHeight - padTop - padBottom;
 
   const rect = chart.getBoundingClientRect();
   const contentW = rect.width;
@@ -406,8 +404,14 @@ function fitToScreen(){
   const scaledW = contentW * s;
   const scaledH = contentH * s;
 
-  chart.style.left = `${Math.max(0, (availW - scaledW) / 2)}px`;
-  chart.style.top  = `${Math.max(0, (availH - scaledH) / 2)}px`;
+  // Center relative to the viewport (not the padded area) so the chart
+  // stays visually centered even when padding is asymmetric (e.g. extra
+  // right padding for the fixed buttons on desktop).
+  const idealLeft = (window.innerWidth - scaledW) / 2 - padLeft;
+  const idealTop  = (window.innerHeight - scaledH) / 2 - padTop;
+
+  chart.style.left = `${Math.max(0, Math.min(idealLeft, availW - scaledW))}px`;
+  chart.style.top  = `${Math.max(0, Math.min(idealTop,  availH - scaledH))}px`;
 }
 
 /* ---- MODAL ---- */
