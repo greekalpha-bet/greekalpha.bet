@@ -377,26 +377,34 @@ function render(){
 /* ---- AUTO-FIT (sem scroll) ---- */
 function fitToScreen(){
   const chart = document.getElementById("chart");
-  const wrap = document.querySelector(".wrap");
+  const stage = document.querySelector(".stage");
+  const footer = document.querySelector(".site-footer");
 
   chart.style.transform = "scale(1)";
   chart.style.position = "absolute";
   chart.style.left = "0";
   chart.style.top = "0";
 
-  const cs = getComputedStyle(wrap);
-  const padLeft = parseFloat(cs.paddingLeft) || 0;
-  const padRight = parseFloat(cs.paddingRight) || 0;
-  const padTop = parseFloat(cs.paddingTop) || 0;
-  const padBottom = parseFloat(cs.paddingBottom) || 0;
+  // Área útil = o próprio .stage (já desconta o padding do .wrap e
+  // respeita 100svh, evitando o descompasso com window.innerHeight
+  // em navegadores mobile com barra de URL dinâmica).
+  const stageRect = stage.getBoundingClientRect();
 
-  const availW = window.innerWidth - padLeft - padRight;
-  const availH = window.innerHeight - padTop - padBottom;
+  // Desconta quanto o footer fixo invade o stage (altura real, medida —
+  // sem números mágicos de padding-bottom).
+  let footerOverlap = 0;
+  if (footer){
+    const fr = footer.getBoundingClientRect();
+    footerOverlap = Math.max(0, stageRect.bottom - fr.top);
+  }
+
+  const availW = stageRect.width;
+  const availH = stageRect.height - footerOverlap;
 
   const rect = chart.getBoundingClientRect();
   const contentW = rect.width;
   const contentH = rect.height;
-  if (contentW <= 0 || contentH <= 0) return;
+  if (contentW <= 0 || contentH <= 0 || availW <= 0 || availH <= 0) return;
 
   const s = Math.min(availW / contentW, availH / contentH) * 0.995;
   chart.style.transform = `scale(${s})`;
@@ -404,14 +412,10 @@ function fitToScreen(){
   const scaledW = contentW * s;
   const scaledH = contentH * s;
 
-  // Center relative to the viewport (not the padded area) so the chart
-  // stays visually centered even when padding is asymmetric (e.g. extra
-  // right padding for the fixed buttons on desktop).
-  const idealLeft = (window.innerWidth - scaledW) / 2 - padLeft;
-  const idealTop  = (window.innerHeight - scaledH) / 2 - padTop;
-
-  chart.style.left = `${Math.max(0, Math.min(idealLeft, availW - scaledW))}px`;
-  chart.style.top  = `${Math.max(0, Math.min(idealTop,  availH - scaledH))}px`;
+  // Centraliza dentro da área realmente livre (entre a borda esquerda,
+  // a coluna de botões à direita e o footer embaixo).
+  chart.style.left = `${Math.max(0, (availW - scaledW) / 2)}px`;
+  chart.style.top  = `${Math.max(0, (availH - scaledH) / 2)}px`;
 }
 
 /* ---- MODAL ---- */
@@ -490,6 +494,15 @@ if (document.fonts && document.fonts.ready) {
 }
 
 window.addEventListener("resize", () => {
+  clearTimeout(window.__fitT);
+  window.__fitT = setTimeout(fitToScreen, 40);
+});
+
+// Refit quando tudo carregar (inclui o logo do footer, que altera a
+// altura medida) e a cada load da imagem do footer (troca de tema).
+window.addEventListener("load", fitToScreen, { once: true });
+const poweredLogo = document.querySelector(".powered-by-logo");
+if (poweredLogo) poweredLogo.addEventListener("load", () => {
   clearTimeout(window.__fitT);
   window.__fitT = setTimeout(fitToScreen, 40);
 });
