@@ -405,8 +405,9 @@ html,body{
   .ui-top-btn img{ width:16px; height:16px; }
   /* language menu should align with the fixed right-side lang button on desktop */
   .lang-menu{ right: 12px; left: auto; top: 216px; transform: none; }
-  /* Extra wrap padding: right to clear the stacked buttons (footer é medido pelo JS) */
-  .wrap{ padding-right: 62px; }
+  /* Padding lateral simétrico: 62px dos dois lados (direita limpa os botões
+     empilhados; esquerda espelha para o chart ficar centrado no viewport) */
+  .wrap{ padding-left: 62px; padding-right: 62px; }
 }
 
 /* Light theme overrides */
