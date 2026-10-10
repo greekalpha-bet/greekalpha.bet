@@ -554,6 +554,33 @@ button{ font:inherit; color:inherit; }
 .powered-by-logo{ height:20px; width:auto; display:block; }
 [data-theme="light"] .powered-by-logo{ filter: invert(1); }
 
+/* ---------- PRONÚNCIA ---------- */
+
+.pron{
+  grid-column: 1 / -1;
+  padding: 12px 12px 4px;
+  border-top: 1px solid var(--modal-border);
+}
+.pron h2, .pron h3{
+  margin: 0 0 8px;
+  font-family: "Cinzel", serif;
+  font-weight: 600;
+  letter-spacing: .08em;
+  font-size: 13px;
+  color: var(--muted-high);
+}
+.pron dl{
+  display:grid;
+  grid-template-columns: max-content 1fr;
+  gap: 4px 14px;
+  margin: 0;
+  font-family: var(--sans);
+  font-size: 14px;
+}
+.pron dt{ color: var(--muted); }
+.pron dd{ margin: 0; color: var(--muted-med); }
+.pron [lang="el"]{ font-family: "GFS Didot", serif; font-size: 16px; color: var(--ink); }
+
 /* ---------- EM FÓRMULAS E OUVIR ---------- */
 
 .examples{
@@ -751,20 +778,23 @@ html.scroll .site-footer{ position:static; padding: 0 12px 16px; }
   .big-glyph{ font-size: 64px; padding: 4px 8px; }
 }
 
-/* ---------- IMPRESSÃO: uma página A4 deitada ---------- */
+/* ---------- IMPRESSÃO ---------- */
+/* A tabela sai numa A4 deitada; a folha de referência, numa A4 em pé
+   (página nomeada: o @page geral não deixa uma página só mudar). */
 @media print{
   /* A4 deitado, margens de 6 mm → área útil ≈ 285 mm × 198 mm */
   @page { size: A4 landscape; margin: 6mm; }
 
-  html, body{
-    background: #fff !important;
-    color: #000 !important;
+  /* A tabela (página inicial) é presa numa folha deitada; as outras
+     páginas (html.scroll) fluem normalmente. */
+  html:not(.scroll), html:not(.scroll) body{
     width: 285mm !important;
     height: 198mm !important;
     overflow: hidden !important;
   }
+  html, body{ background: #fff !important; color: #000 !important; }
 
-  .toolbar, .backdrop, .site-footer{ display: none !important; }
+  .toolbar, .backdrop, .site-footer, .crumbs, .sheet-lede{ display: none !important; }
 
   .wrap{
     display:block !important;
@@ -800,4 +830,71 @@ html.scroll .site-footer{ position:static; padding: 0 12px 16px; }
   .glyph{ font-size: 76px !important; margin-bottom: 10px !important; color: #000 !important; }
   .name{ font-size: 12px !important; color: #000 !important; }
   .ipa, .greek{ font-size: 13px !important; color: #000 !important; }
+}
+
+/* ---------- FOLHA DE REFERÊNCIA ---------- */
+
+.sheet-page{
+  max-width: 980px;
+  margin: 0 auto;
+  padding: 24px 72px 72px 24px;
+}
+.sheet-title{
+  margin: 0 0 6px;
+  font-family: "Cinzel", serif;
+  font-weight: 600;
+  letter-spacing: .08em;
+  font-size: 24px;
+  color: var(--blue);
+}
+.sheet-lede{ margin: 0 0 18px; font-family: var(--sans); font-size: 14px; color: var(--muted); }
+
+.sheet{
+  width: 100%;
+  border-collapse: collapse;
+  font-family: var(--sans);
+  font-size: 14px;
+}
+.sheet th{
+  padding: 6px 8px;
+  border-bottom: 1px solid var(--rule);
+  text-align: left;
+  font-family: "Cinzel", serif;
+  font-weight: 600;
+  font-size: 12px;
+  letter-spacing: .06em;
+  color: var(--muted-high);
+}
+.sheet td{
+  padding: 5px 8px;
+  border-bottom: 1px solid var(--rule);
+  vertical-align: middle;
+  color: var(--muted-med);
+}
+.sheet .s-glyph{ font-family: "GFS Didot", serif; font-size: 26px; line-height: 1; white-space: nowrap; }
+.sheet .s-glyph a{ color: var(--ink); text-decoration: none; }
+.sheet .s-name{ font-family: "Cinzel", serif; font-weight: 600; color: var(--blue); white-space: nowrap; }
+.sheet .s-tex{ font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; font-size: 13px; color: var(--ink); white-space: nowrap; }
+.sheet .s-sound{ font-family: "GFS Didot", serif; font-size: 15px; white-space: nowrap; }
+.sheet-foot{ margin-top: 14px; font-family: var(--sans); font-size: 12px; color: var(--note); }
+
+.footer-sheet{ color: var(--muted); }
+
+@media (max-width: 600px){
+  .sheet-page{ padding: 64px 10px 32px; }
+  .sheet{ font-size: 12px; }
+  .sheet .s-tex, .sheet .s-sound{ display: none; } /* no celular: letra, nome e uso */
+  .sheet th:nth-child(3), .sheet th:nth-child(4){ display: none; }
+}
+
+@media print{
+  @page sheet{ size: A4 portrait; margin: 10mm; }
+  .sheet-page{ page: sheet; max-width: none; padding: 0; }
+  .sheet-title{ color: #000; font-size: 18px; }
+  .sheet{ font-size: 10.5px; }
+  .sheet th, .sheet td{ padding: 3px 6px; color: #000 !important; border-color: #ccc; }
+  .sheet .s-glyph{ font-size: 20px; }
+  .sheet .s-glyph a, .sheet .s-name, .sheet .s-tex{ color: #000; }
+  .sheet .s-tex, .sheet .s-sound{ display: table-cell !important; }
+  .sheet-foot{ color: #555; }
 }

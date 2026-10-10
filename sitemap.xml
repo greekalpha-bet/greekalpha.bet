@@ -6,6 +6,11 @@
     <xhtml:link rel="alternate" hreflang="pt-BR" href="https://greekalpha.bet/pt/"/>
   </url>
   <url>
+    <loc>https://greekalpha.bet/cheat-sheet/</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://greekalpha.bet/cheat-sheet/"/>
+    <xhtml:link rel="alternate" hreflang="pt-BR" href="https://greekalpha.bet/pt/folha/"/>
+  </url>
+  <url>
     <loc>https://greekalpha.bet/alpha/</loc>
     <xhtml:link rel="alternate" hreflang="en" href="https://greekalpha.bet/alpha/"/>
     <xhtml:link rel="alternate" hreflang="pt-BR" href="https://greekalpha.bet/pt/alfa/"/>
@@ -129,6 +134,11 @@
     <loc>https://greekalpha.bet/pt/</loc>
     <xhtml:link rel="alternate" hreflang="pt-BR" href="https://greekalpha.bet/pt/"/>
     <xhtml:link rel="alternate" hreflang="en" href="https://greekalpha.bet/"/>
+  </url>
+  <url>
+    <loc>https://greekalpha.bet/pt/folha/</loc>
+    <xhtml:link rel="alternate" hreflang="pt-BR" href="https://greekalpha.bet/pt/folha/"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://greekalpha.bet/cheat-sheet/"/>
   </url>
   <url>
     <loc>https://greekalpha.bet/pt/alfa/</loc>

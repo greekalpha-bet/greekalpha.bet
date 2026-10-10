@@ -15,9 +15,9 @@ import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
 
 const ROOT = dirname(fileURLToPath(import.meta.url));
-const { data, uses, writing, confusables, namesPt, examples, MK } = createRequire(import.meta.url)("./data.js");
+const { data, uses, writing, confusables, namesPt, examples, MK, modern } = createRequire(import.meta.url)("./data.js");
 const SITE = "https://greekalpha.bet";
-const VERSION = "7"; // muda quando o CSS/JS mudam, para furar o cache
+const VERSION = "8"; // muda quando o CSS/JS mudam, para furar o cache
 
 // 1st, 2nd, 3rd, 4th… 11th, 12th, 13th… 21st, 22nd.
 const ordinal = n => {
@@ -46,6 +46,14 @@ const T = {
     latinUpper: "same as the Latin letter: LaTeX has no command for it", copy: "Copy",
     dontConfuse: "DON'T CONFUSE IT",
     inFormulas: "IN FORMULAS", seeAt: "See it explained at morrisonkuhlsen.com →", listen: "Listen",
+    pronunciation: "PRONUNCIATION", ancient: "Ancient Greek", modernGreek: "Modern Greek", sound: "sound", beforeEI: "before e/i",
+    sheetSlug: "cheat-sheet/", sheetLink: "Cheat sheet (print / PDF)",
+    sheetTitle: "Greek Alphabet Cheat Sheet — Letters, LaTeX and Uses in Statistics | greekalpha.bet",
+    sheetHeading: "Greek alphabet cheat sheet",
+    sheetDesc: "The 24 Greek letters on one printable page: glyph, name, LaTeX command, ancient and modern pronunciation, and the most common use in math and statistics.",
+    sheetLede: "All 24 letters on one A4 page. Use the print button (or Ctrl+P) and choose “Save as PDF” to keep a copy.",
+    sheetCols: ["Letter", "Name", "LaTeX", "Sound (ancient · modern)", "Usual meaning"],
+    sheetPrint: "Print or save as PDF",
     all: "All letters", prev: "Previous", nextLetter: "Next",
     position: n => `The ${ordinal(n)} letter of the Greek alphabet.`,
     letterTitle: (name, gl) => `${name} (${gl}) — Greek letter in math and statistics | greekalpha.bet`,
@@ -68,6 +76,14 @@ const T = {
     latinUpper: "igual à letra latina: o LaTeX não tem comando para ela", copy: "Copiar",
     dontConfuse: "NÃO CONFUNDA",
     inFormulas: "EM FÓRMULAS", seeAt: "Ver explicado no morrisonkuhlsen.com →", listen: "Ouvir",
+    pronunciation: "PRONÚNCIA", ancient: "Grego antigo", modernGreek: "Grego moderno", sound: "som", beforeEI: "antes de e/i",
+    sheetSlug: "folha/", sheetLink: "Folha de referência (imprimir / PDF)",
+    sheetTitle: "Folha de Referência do Alfabeto Grego — Letras, LaTeX e Usos na Estatística | greekalpha.bet",
+    sheetHeading: "Folha de referência do alfabeto grego",
+    sheetDesc: "As 24 letras gregas numa página para imprimir: glifo, nome, comando LaTeX, pronúncia antiga e moderna e o uso mais comum na matemática e na estatística.",
+    sheetLede: "As 24 letras numa folha A4. Use o botão de imprimir (ou Ctrl+P) e escolha “Salvar como PDF” para guardar uma cópia.",
+    sheetCols: ["Letra", "Nome", "LaTeX", "Som (antigo · moderno)", "Uso mais comum"],
+    sheetPrint: "Imprimir ou salvar em PDF",
     all: "Todas as letras", prev: "Anterior", nextLetter: "Próxima",
     position: n => `A ${n}ª letra do alfabeto grego.`,
     letterTitle: (name, gl) => `${name} (${gl}) — a letra grega na matemática e na estatística | greekalpha.bet`,
@@ -139,8 +155,9 @@ function quizMarkup(lang) {
   </div>`;
 }
 
-const footer = `<footer class="site-footer">
+const footer = lang => `<footer class="site-footer">
     <div class="site-footer-inner">
+      <a class="footer-sheet" href="${T[lang].base}${T[lang].sheetSlug}">${T[lang].sheetLink}</a>
       <small>© 2026 greekalpha.bet — <a href="https://github.com/greekalpha-bet/greekalpha.bet/blob/main/LICENSE">MIT License</a></small>
       <div class="powered-by">
         <span class="powered-text"><strong>Powered</strong> by</span>
@@ -193,6 +210,8 @@ function page({ lang, title, desc, url, alt, ld, htmlClass = "", body }) {
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600&family=GFS+Didot:ital@0;1&family=Inter:wght@400;600&display=swap" rel="stylesheet">
   <link rel="icon" href="/assets/favicon.png" type="image/png">
+  <link rel="apple-touch-icon" href="/assets/icon-180.png">
+  <link rel="manifest" href="/manifest.webmanifest">
   <link rel="stylesheet" href="/style.css?v=${VERSION}" />
 
   <script async src="https://www.googletagmanager.com/gtag/js?id=G-LGW2XK4ZKC"></script>
@@ -268,7 +287,7 @@ function home(lang) {
 
   ${quizMarkup(lang)}
 
-  ${footer}`,
+  ${footer(lang)}`,
   });
 }
 
@@ -290,6 +309,16 @@ function writingHtml(item, lang) {
     `<div class="writing-row"><span class="writing-label">${label}</span>${copy(ch, "is-char")}${copy(tex, "is-tex")}${copy(ent, "is-ent")}${latin ? `<span class="writing-hint">${t.latinUpper}</span>` : ""}</div>`;
   const rows = [...w.lo.map((f, i) => row(i ? t.variant : t.lower, f)), row(t.upper, w.up)];
   return `<section class="writing"><h2>${t.howToWrite}</h2><div class="writing-rows">${rows.join("")}</div></section>`;
+}
+
+// O som da letra no grego antigo (o `ipa` da tabela) e no moderno, com o
+// nome moderno: por que β soa "v" e η soa "i" na Grécia de hoje.
+function pronunciationHtml(item, lang) {
+  const t = T[lang], [nome, nomeIpa, som, antes] = modern[item.id];
+  return `<section class="pron"><h2>${t.pronunciation}</h2><dl>`
+    + `<dt>${t.ancient}</dt><dd>${t.sound} ${item.ipa}</dd>`
+    + `<dt>${t.modernGreek}</dt><dd><span lang="el">${nome}</span> ${nomeIpa} · ${t.sound} ${som}${antes ? ` (${t.beforeEI}: ${antes})` : ""}</dd>`
+    + `</dl></section>`;
 }
 
 // Fórmulas em que a letra aparece, com o link para a explicação no
@@ -351,6 +380,7 @@ function letter(item, i, lang) {
       </header>
       <div class="modal-body">
         ${usesHtml(item, lang)}
+        ${pronunciationHtml(item, lang)}
         ${examplesHtml(item, lang)}
         ${writingHtml(item, lang)}
         ${confusionHtml(item, lang)}
@@ -366,7 +396,50 @@ function letter(item, i, lang) {
 
   ${quizMarkup(lang)}
 
-  ${footer}`,
+  ${footer(lang)}`,
+  });
+}
+
+/* ------------------------------------------------------------------ folha de referência */
+
+// O uso mais comum: o primeiro de estatística, a menos que seja um "raro";
+// aí o primeiro de matemática.
+function usualMeaning(item, lang) {
+  const u = uses[item.id][USES_KEY[lang]];
+  const raro = /^(rare|seldom|less common|raro|pouco|menos comum)/i;
+  return (u.stats && u.stats[0] && !raro.test(u.stats[0])) ? u.stats[0] : u.math[0];
+}
+
+function sheet(lang) {
+  const t = T[lang], other = t.otherLang;
+  const url = `${t.base}${t.sheetSlug}`, alt = `${T[other].base}${T[other].sheetSlug}`;
+  const rows = data.map(item => {
+    const w = writing[item.id], m = modern[item.id];
+    const tex = [w.lo[0][1], w.up[3] ? "" : w.up[1]].filter(Boolean).join("  ");
+    return `<tr><td class="s-glyph" lang="el"><a href="${letterUrl(item, lang)}">${item.glyph}</a></td><td class="s-name">${nice(nameOf(item, lang))}</td><td class="s-tex">${esc(tex)}</td><td class="s-sound">${item.ipa} · ${m[2]}</td><td class="s-use">${esc(usualMeaning(item, lang))}</td></tr>`;
+  });
+  return page({
+    lang, url, alt, htmlClass: "scroll",
+    title: t.sheetTitle, desc: t.sheetDesc,
+    ld: { "@context": "https://schema.org", "@type": "WebPage", url: `${SITE}${url}`, name: t.sheetHeading, description: t.sheetDesc, inLanguage: t.html },
+    body: `${toolbar(lang, alt, { print: true })}
+
+  <main class="sheet-page">
+    <nav class="crumbs"><a href="${t.base}">${t.all}</a> › ${t.sheetHeading}</nav>
+    <h1 class="sheet-title">${t.sheetHeading}</h1>
+    <p class="sheet-lede">${t.sheetLede}</p>
+    <table class="sheet">
+      <thead><tr>${t.sheetCols.map(c => `<th>${c}</th>`).join("")}</tr></thead>
+      <tbody>
+        ${rows.join("\n        ")}
+      </tbody>
+    </table>
+    <p class="sheet-foot">greekalpha.bet${t.base === "/" ? "" : "/pt"} · ${t.note}</p>
+  </main>
+
+  ${quizMarkup(lang)}
+
+  ${footer(lang)}`,
   });
 }
 
@@ -390,6 +463,9 @@ const urls = [];
 for (const lang of ["en", "pt"]) {
   write(join(T[lang].base, "index.html").slice(1), home(lang));
   urls.push([T[lang].base, T[T[lang].otherLang].base, lang]);
+  const o = T[lang].otherLang;
+  write(join(T[lang].base, T[lang].sheetSlug, "index.html").slice(1), sheet(lang));
+  urls.push([T[lang].base + T[lang].sheetSlug, T[o].base + T[o].sheetSlug, lang]);
   data.forEach((item, i) => {
     write(join(letterUrl(item, lang), "index.html").slice(1), letter(item, i, lang));
     urls.push([letterUrl(item, lang), letterUrl(item, T[lang].otherLang), lang]);
@@ -406,5 +482,75 @@ ${urls.map(([u, a, lang]) => `  <url>
 </urlset>
 `);
 write("robots.txt", `User-agent: *\nAllow: /\n\nSitemap: ${SITE}/sitemap.xml\n`);
+
+/* ------------------------------------------------------------------ offline */
+
+write("manifest.webmanifest", JSON.stringify({
+  name: "greekalpha.bet — Greek alphabet",
+  short_name: "GreekAlpha",
+  description: T.en.homeDesc,
+  start_url: "/",
+  scope: "/",
+  display: "standalone",
+  background_color: "#0b0e14",
+  theme_color: "#0b0e14",
+  icons: [
+    { src: "/assets/icon-192.png", sizes: "192x192", type: "image/png", purpose: "any maskable" },
+    { src: "/assets/icon-512.png", sizes: "512x512", type: "image/png", purpose: "any maskable" },
+  ],
+}, null, 2) + "\n");
+
+// O service worker guarda todas as páginas e os arquivos de que elas
+// precisam na primeira visita (≈ 400 KB); depois o site abre sem internet.
+// A lista sai daqui para não esquecer nenhuma página; o nome do cache leva
+// a VERSION, então um build novo troca tudo de uma vez.
+const precache = [
+  ...urls.map(([u]) => u),
+  `/style.css?v=${VERSION}`, `/data.js?v=${VERSION}`, `/script.js?v=${VERSION}`,
+  "/assets/favicon.png", "/assets/icon-192.png", "/assets/mk-logo-white-300x.png",
+];
+write("sw.js", `// Gerado pelo build.mjs: não edite à mão.
+const CACHE = "greekalpha-${VERSION}";
+const PRECACHE = ${JSON.stringify(precache, null, 2)};
+
+self.addEventListener("install", e => {
+  e.waitUntil(caches.open(CACHE).then(c => c.addAll(PRECACHE)).then(() => self.skipWaiting()));
+});
+
+self.addEventListener("activate", e => {
+  e.waitUntil(caches.keys()
+    .then(keys => Promise.all(keys.filter(k => k.startsWith("greekalpha-") && k !== CACHE).map(k => caches.delete(k))))
+    .then(() => self.clients.claim()));
+});
+
+self.addEventListener("fetch", e => {
+  const req = e.request;
+  if (req.method !== "GET") return;
+  const url = new URL(req.url);
+
+  // Páginas: a rede primeiro (para ver a versão nova), o cache sem internet.
+  if (req.mode === "navigate") {
+    e.respondWith(fetch(req).then(res => {
+      const copy = res.clone();
+      caches.open(CACHE).then(c => c.put(req, copy));
+      return res;
+    }).catch(() => caches.match(req).then(r => r || caches.match("/"))));
+    return;
+  }
+
+  // Arquivos do site (CSS, JS e imagens com versão no nome, áudios) e as
+  // fontes do Google: o cache primeiro, e o que vier da rede fica guardado.
+  const proprio = url.origin === location.origin;
+  const fonte = url.hostname === "fonts.googleapis.com" || url.hostname === "fonts.gstatic.com";
+  if (!proprio && !fonte) return; // analytics e o resto: direto para a rede
+  e.respondWith(caches.match(req).then(hit => hit || fetch(req).then(res => {
+    if (res.ok || res.type === "opaque") {
+      const copy = res.clone();
+      caches.open(CACHE).then(c => c.put(req, copy));
+    }
+    return res;
+  })));
+});
+`);
 
 console.log(`${urls.length} páginas, sitemap.xml e robots.txt`);

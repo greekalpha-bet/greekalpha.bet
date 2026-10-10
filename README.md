@@ -9,7 +9,9 @@ Uma ferramenta interativa para estudar o alfabeto grego, com glyphs, pronúncia 
 - Uma página por letra, com usos, como escrever (Unicode, LaTeX, HTML) e letras com que não confundir
 - Modal com informações (grafia, pronúncia, usos) e cópia com um clique
 - Quiz com repetição espaçada (glifo → nome, nome → glifo, letras parecidas)
-- Pronúncia de cada letra, e exemplos de fórmula com links para explicações no morrisonkuhlsen.com
+- Pronúncia de cada letra (áudio, e o som no grego antigo e no moderno), e exemplos de fórmula com links para explicações no morrisonkuhlsen.com
+- Folha de referência com as 24 letras numa A4
+- Funciona offline e pode ser instalado como app
 - Troca de tema (claro/escuro)
 - Áudio de pronúncia: `assets/audio/greek-alphabet-pronunciation.mp3`
 - Alternância de idioma (EN / PT-BR)
@@ -45,7 +47,9 @@ npx serve .
 `node build.mjs` (Node 18+, sem dependências) escreve:
 - `index.html` e `pt/index.html` — a tabela, em inglês e português, já pronta no HTML
 - `<letra>/index.html` e `pt/<letra>/index.html` — uma página por letra (ex.: `/sigma/`, `/pt/teta/`)
+- `cheat-sheet/` e `pt/folha/` — a folha de referência, para imprimir ou salvar em PDF
 - `sitemap.xml` e `robots.txt`
+- `manifest.webmanifest` e `sw.js` — o site instalável e offline (o service worker guarda todas as páginas na primeira visita)
 
 Depois de mudar o `data.js` ou o `build.mjs`, rode `node build.mjs` e faça commit do HTML gerado junto: o GitHub Pages serve os arquivos como estão. Ao mudar o CSS ou o JS, aumente `VERSION` no `build.mjs` para os navegadores não usarem a versão em cache.
 
