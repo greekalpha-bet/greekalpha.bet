@@ -1,3 +1,10 @@
+/* greekalpha.bet — a tabela do alfabeto grego.
+
+   Os dados ficam no topo: `data` são as 24 letras (glifo, nome, pronúncia
+   e grafia grega) e `uses`, os usos comuns de cada uma em matemática,
+   probabilidade e estatística, em inglês e português. O resto, abaixo,
+   é a interface. */
+
 const data = [
   { id:"alpha",   glyph:"Αα", name:"ALPHA",   ipa:"[a]",  greek:"ἄλφα" },
   { id:"beta",    glyph:"Ββ", name:"BETA",    ipa:"[b]",  greek:"βῆτα" },
@@ -320,388 +327,289 @@ const uses = {
   }
 };
 
-function el(tag, className, text){
-  const node = document.createElement(tag);
-  if (className) node.className = className;
-  if (text !== undefined) node.textContent = text;
-  return node;
-}
+/* ======================================================================
+   Interface. Tudo fica dentro de uma função, sem variáveis globais.
+   ====================================================================== */
+(() => {
+  "use strict";
 
-function makeCell(item){
-  const cell = el("div", "cell");
-  cell.tabIndex = 0;                 // acessível por teclado
-  cell.dataset.id = item.id;
+  const I18N = {
+    "en": {
+      blockMath: "MATHEMATICS",
+      blockProb: "PROBABILITY",
+      blockStats: "STATISTICS",
+      noUse: "(no standard usage; it depends on the author's convention)",
+      note: "Note: notations vary between books/fields; these are the most common usages.",
+      chart: "Greek alphabet table",
+      close: "Close",
+      theme: "Toggle theme",
+      audioPlay: "Play the alphabet pronunciation",
+      audioStop: "Stop the pronunciation",
+      print: "Print",
+      language: "Language",
+    },
+    "pt-BR": {
+      blockMath: "MATEMÁTICA",
+      blockProb: "PROBABILIDADE",
+      blockStats: "ESTATÍSTICA",
+      noUse: "(sem uso “padrão”; depende da convenção do autor)",
+      note: "Obs.: notações variam entre livros/áreas; aqui estão os usos mais comuns.",
+      chart: "Tabela do alfabeto grego",
+      close: "Fechar",
+      theme: "Alternar tema",
+      audioPlay: "Ouvir a pronúncia do alfabeto",
+      audioStop: "Parar a pronúncia",
+      print: "Imprimir",
+      language: "Idioma",
+    },
+  };
 
-  const glyph = el("div", "glyph", item.glyph);
+  // localStorage pode não existir (modo privado, bloqueio de cookies).
+  const store = {
+    get(k) { try { return localStorage.getItem(k); } catch (e) { return null; } },
+    set(k, v) { try { localStorage.setItem(k, v); } catch (e) { /* sem persistência */ } },
+  };
 
-  const meta = el("div", "meta");
-  const latin = el("div", "latin");
-  latin.append(
-    el("span", "name", item.name),
-    el("span", "ipa", item.ipa)
-  );
-
-  meta.append(latin, el("div", "greek", item.greek));
-  cell.append(glyph, meta);
-
-  // Clique / Enter / Espaço
-  const open = () => openModal(item);
-  cell.addEventListener("click", open);
-  cell.addEventListener("keydown", (e) => {
-    if (e.key === "Enter" || e.key === " ") {
-      e.preventDefault();
-      open();
-    }
-  });
-
-  return cell;
-}
-
-function render(){
-  const root = document.getElementById("chart");
-  root.innerHTML = "";
-
-  const perRow = 6;
-  const rows = Math.ceil(data.length / perRow);
-
-  for (let r = 0; r < rows; r++){
-    const row = el("div", "row");
-    data.slice(r * perRow, (r + 1) * perRow)
-      .forEach(item => row.appendChild(makeCell(item)));
-
-    root.appendChild(row);
-    if (r !== rows - 1) root.appendChild(el("div", "rule"));
-  }
-}
-
-/* ---- AUTO-FIT (sem scroll) ---- */
-function fitToScreen(){
-  const chart = document.getElementById("chart");
+  const $ = id => document.getElementById(id);
+  const chart = $("chart");
   const stage = document.querySelector(".stage");
   const footer = document.querySelector(".site-footer");
+  const backdrop = $("backdrop");
+  const modal = backdrop.querySelector(".modal");
+  const closeBtn = $("closeBtn");
+  const themeToggle = $("themeToggle");
+  const audioBtn = $("audioBtn");
+  const printBtn = $("printBtn");
+  const langToggle = $("langToggle");
+  const langMenu = $("langMenu");
 
-  chart.style.transform = "scale(1)";
-  chart.style.position = "absolute";
-  chart.style.left = "0";
-  chart.style.top = "0";
-
-  // Área útil = o próprio .stage (já desconta o padding do .wrap e
-  // respeita 100svh, evitando o descompasso com window.innerHeight
-  // em navegadores mobile com barra de URL dinâmica).
-  const stageRect = stage.getBoundingClientRect();
-
-  // Desconta quanto o footer fixo invade o stage (altura real, medida —
-  // sem números mágicos de padding-bottom).
-  let footerOverlap = 0;
-  if (footer){
-    const fr = footer.getBoundingClientRect();
-    footerOverlap = Math.max(0, stageRect.bottom - fr.top);
+  function el(tag, className, text) {
+    const node = document.createElement(tag);
+    if (className) node.className = className;
+    if (text !== undefined) node.textContent = text;
+    return node;
   }
 
-  const availW = stageRect.width;
-  const availH = stageRect.height - footerOverlap;
+  /* ---------------------------------------------------------- idioma */
 
-  const rect = chart.getBoundingClientRect();
-  const contentW = rect.width;
-  const contentH = rect.height;
-  if (contentW <= 0 || contentH <= 0 || availW <= 0 || availH <= 0) return;
+  // Sem escolha salva, segue o navegador: português para quem usa pt-*.
+  let lang = store.get("lang");
+  if (!I18N[lang]) lang = (navigator.language || "").toLowerCase().startsWith("pt") ? "pt-BR" : "en";
+  const t = key => I18N[lang][key];
 
-  const s = Math.min(availW / contentW, availH / contentH) * 0.995;
-  chart.style.transform = `scale(${s})`;
+  const label = (btn, text) => { btn.setAttribute("aria-label", text); btn.title = text; };
 
-  const scaledW = contentW * s;
-  const scaledH = contentH * s;
+  function applyLanguage(next) {
+    lang = I18N[next] ? next : "en";
+    document.documentElement.lang = lang;
+    chart.setAttribute("aria-label", t("chart"));
+    label(closeBtn, t("close"));
+    label(themeToggle, t("theme"));
+    label(printBtn, t("print"));
+    label(langToggle, t("language"));
+    label(audioBtn, audioBtn.getAttribute("aria-pressed") === "true" ? t("audioStop") : t("audioPlay"));
+    langMenu.querySelectorAll(".lang-item").forEach(b => b.setAttribute("aria-checked", String(b.dataset.lang === lang)));
+    if (!backdrop.hidden && current) fillModal(current); // o modal aberto troca de língua junto
+  }
 
-  // Centraliza dentro da área realmente livre (entre a borda esquerda,
-  // a coluna de botões à direita e o footer embaixo).
-  chart.style.left = `${Math.max(0, (availW - scaledW) / 2)}px`;
-  chart.style.top  = `${Math.max(0, (availH - scaledH) / 2)}px`;
-}
+  function closeMenu(focusToggle) {
+    langMenu.hidden = true;
+    langToggle.setAttribute("aria-expanded", "false");
+    if (focusToggle) langToggle.focus();
+  }
 
-/* ---- MODAL ---- */
-const backdrop = document.getElementById("backdrop");
-const closeBtn = document.getElementById("closeBtn");
-const bigGlyph = document.getElementById("bigGlyph");
-const modalTitle = document.getElementById("modalTitle");
-const modalSub = document.getElementById("modalSub");
-const modalBody = document.getElementById("modalBody");
-const langToggle = document.getElementById('langToggle');
-const printBtn = document.getElementById('printBtn');
-
-let lastFocusEl = null;
-
-function block(title, items){
-  const b = document.createElement("div");
-  b.className = "block";
-  const h = document.createElement("h3");
-  h.textContent = title;
-  const ul = document.createElement("ul");
-  (items || ["(sem uso “padrão”; depende da convenção do autor)"]).forEach(t => {
-    const li = document.createElement("li");
-    li.textContent = t;
-    ul.appendChild(li);
+  langToggle.addEventListener("click", () => {
+    if (!langMenu.hidden) return closeMenu(false);
+    langMenu.hidden = false;
+    langToggle.setAttribute("aria-expanded", "true");
+    (langMenu.querySelector('[aria-checked="true"]') || langMenu.querySelector(".lang-item")).focus();
   });
-  b.append(h, ul);
-  return b;
-}
+  langMenu.addEventListener("click", e => {
+    const item = e.target.closest(".lang-item");
+    if (!item) return;
+    applyLanguage(item.dataset.lang);
+    store.set("lang", lang);
+    closeMenu(true);
+  });
+  langMenu.addEventListener("keydown", e => {
+    const items = [...langMenu.querySelectorAll(".lang-item")];
+    const i = items.indexOf(document.activeElement);
+    if (e.key === "Escape") closeMenu(true);
+    else if (e.key === "ArrowDown") { e.preventDefault(); items[(i + 1) % items.length].focus(); }
+    else if (e.key === "ArrowUp") { e.preventDefault(); items[(i - 1 + items.length) % items.length].focus(); }
+  });
+  document.addEventListener("click", e => {
+    if (!langMenu.hidden && !e.target.closest(".lang")) closeMenu(false);
+  });
 
-function openModal(item){
-  lastFocusEl = document.activeElement;
+  /* ---------------------------------------------------------- tabela */
 
-  const uall = uses[item.id] || {};
-  const u = (uall[currentLang] || uall['pt-BR'] || {});
-  bigGlyph.textContent = item.glyph;
-  modalTitle.textContent = item.name;
-  modalSub.textContent = `${item.greek} · ${item.ipa}`;
+  // Seis letras por linha, com um fio entre as linhas. No celular, o CSS
+  // desfaz as linhas (display: contents) e reorganiza em três colunas.
+  function render() {
+    const PER_ROW = 6;
+    chart.replaceChildren();
+    for (let r = 0; r < data.length; r += PER_ROW) {
+      if (r) chart.appendChild(el("div", "rule"));
+      const row = el("div", "row");
+      data.slice(r, r + PER_ROW).forEach(item => row.appendChild(makeCell(item)));
+      chart.appendChild(row);
+    }
+  }
 
-  modalBody.innerHTML = "";
-  modalBody.append(
-    block(locales[currentLang].blockMath, u.math),
-    block(locales[currentLang].blockProb, u.prob),
-    block(locales[currentLang].blockStats, u.stats)
-  );
+  function makeCell(item) {
+    const cell = el("button", "cell");
+    cell.type = "button";
+    cell.dataset.id = item.id;
+    const latin = el("span", "latin");
+    latin.append(el("span", "name", item.name), el("span", "ipa", item.ipa));
+    const meta = el("span", "meta");
+    meta.append(latin, el("span", "greek", item.greek));
+    cell.append(el("span", "glyph", item.glyph), meta);
+    cell.addEventListener("click", () => openModal(item));
+    return cell;
+  }
 
-  const note = document.createElement("div");
-  note.className = "note";
-  note.textContent = locales[currentLang].note;
-  modalBody.appendChild(note);
+  /* ---------------------------------------------------------- ajuste à tela */
 
+  // No desktop a tabela inteira cabe na tela, sem rolagem: mede-se o espaço
+  // livre e aplica-se uma escala. No celular (ver o CSS) isso deixaria as
+  // letras minúsculas; lá a tabela vira uma grade de três colunas que rola.
+  const MOBILE = matchMedia("(max-width: 600px)");
+
+  function fitToScreen() {
+    if (MOBILE.matches) {
+      chart.style.transform = chart.style.left = chart.style.top = "";
+      return;
+    }
+    chart.style.transform = "scale(1)";
+    const area = stage.getBoundingClientRect();
+    // Quanto o rodapé fixo invade o palco (medido, sem número mágico).
+    const overlap = footer ? Math.max(0, area.bottom - footer.getBoundingClientRect().top) : 0;
+    const availW = area.width, availH = area.height - overlap;
+    const { width: w, height: h } = chart.getBoundingClientRect();
+    if (w <= 0 || h <= 0 || availW <= 0 || availH <= 0) return;
+    const s = Math.min(availW / w, availH / h) * 0.995;
+    chart.style.transform = `scale(${s})`;
+    chart.style.left = `${Math.max(0, (availW - w * s) / 2)}px`;
+    chart.style.top = `${Math.max(0, (availH - h * s) / 2)}px`;
+  }
+
+  // Um ajuste por quadro, venha o pedido de onde vier.
+  let fitPending = 0;
+  const scheduleFit = () => {
+    cancelAnimationFrame(fitPending);
+    fitPending = requestAnimationFrame(fitToScreen);
+  };
+
+  /* ---------------------------------------------------------- modal */
+
+  let current = null, lastFocus = null;
+
+  function block(title, items) {
+    const b = el("section", "block");
+    const ul = el("ul");
+    (items && items.length ? items : [t("noUse")]).forEach(text => ul.appendChild(el("li", null, text)));
+    b.append(el("h3", null, title), ul);
+    return b;
+  }
+
+  function fillModal(item) {
+    const u = (uses[item.id] || {})[lang] || {};
+    $("bigGlyph").textContent = item.glyph;
+    $("modalTitle").textContent = item.name;
+    $("modalSub").textContent = `${item.greek} · ${item.ipa}`;
+    $("modalBody").replaceChildren(
+      block(t("blockMath"), u.math),
+      block(t("blockProb"), u.prob),
+      block(t("blockStats"), u.stats),
+      el("p", "note", t("note")));
+  }
+
+  function openModal(item) {
+    current = item;
+    lastFocus = document.activeElement;
+    fillModal(item);
     backdrop.hidden = false;
-    backdrop.setAttribute("aria-hidden", "false");
-    if (closeBtn && typeof closeBtn.focus === 'function') closeBtn.focus();
-}
-
-function closeModal(){
-  backdrop.hidden = true;
-  backdrop.setAttribute("aria-hidden", "true");
-  if (lastFocusEl && typeof lastFocusEl.focus === "function") lastFocusEl.focus();
-}
-
-if (closeBtn) closeBtn.addEventListener("click", closeModal);
-backdrop.addEventListener("click", (e) => {
-  if (e.target === backdrop) closeModal();
-});
-window.addEventListener("keydown", (e) => {
-  if (!backdrop.hidden && e.key === "Escape") closeModal();
-});
-
-/* init */
-render();
-if (document.fonts && document.fonts.ready) {
-  document.fonts.ready.then(() => fitToScreen());
-} else {
-  window.addEventListener("load", fitToScreen, { once: true });
-}
-
-window.addEventListener("resize", () => {
-  clearTimeout(window.__fitT);
-  window.__fitT = setTimeout(fitToScreen, 40);
-});
-
-// Refit quando tudo carregar (inclui o logo do footer, que altera a
-// altura medida) e a cada load da imagem do footer (troca de tema).
-window.addEventListener("load", fitToScreen, { once: true });
-const poweredLogo = document.querySelector(".powered-by-logo");
-if (poweredLogo) poweredLogo.addEventListener("load", () => {
-  clearTimeout(window.__fitT);
-  window.__fitT = setTimeout(fitToScreen, 40);
-});
-
-const ro = new ResizeObserver(() => {
-  clearTimeout(window.__fitT);
-  window.__fitT = setTimeout(fitToScreen, 40);
-});
-ro.observe(document.getElementById("chart"));
-
-fitToScreen();
-
-/* Theme toggle: persist and apply light/dark */
-const themeToggle = document.getElementById('themeToggle');
-function applyTheme(theme){
-  if (theme === 'light'){
-    document.documentElement.setAttribute('data-theme','light');
-    if (themeToggle) { themeToggle.setAttribute('aria-pressed','true'); }
-  } else {
-    document.documentElement.removeAttribute('data-theme');
-    if (themeToggle) { themeToggle.setAttribute('aria-pressed','false'); }
+    document.body.classList.add("modal-open");
+    closeBtn.focus();
   }
-  // keep footer logo in sync
-  updateFooterLogo(theme);
-}
 
-// Update footer logo according to theme (white for dark theme, black for light)
-function updateFooterLogo(theme){
-  try{
-    const logo = document.querySelector('.powered-by-logo');
-    if (!logo) return;
-    if (theme === 'light'){
-      logo.src = 'assets/mk-logo-black-300x.png';
-      logo.alt = 'Powered by MK (dark text)';
+  function closeModal() {
+    if (backdrop.hidden) return;
+    backdrop.hidden = true;
+    document.body.classList.remove("modal-open");
+    current = null;
+    if (lastFocus) lastFocus.focus();
+  }
+
+  closeBtn.addEventListener("click", closeModal);
+  backdrop.addEventListener("click", e => { if (e.target === backdrop) closeModal(); });
+  document.addEventListener("keydown", e => {
+    if (backdrop.hidden) return;
+    if (e.key === "Escape") return closeModal();
+    // O foco não sai do modal enquanto ele está aberto.
+    if (e.key === "Tab") {
+      const f = [...modal.querySelectorAll("button, [href], [tabindex]:not([tabindex='-1'])")];
+      const first = f[0], last = f[f.length - 1];
+      if (e.shiftKey && document.activeElement === first) { e.preventDefault(); last.focus(); }
+      else if (!e.shiftKey && document.activeElement === last) { e.preventDefault(); first.focus(); }
+    }
+  });
+
+  /* ---------------------------------------------------------- tema */
+
+  // O <head> já aplicou o tema antes da primeira pintura; aqui só o botão.
+  const isLight = () => document.documentElement.getAttribute("data-theme") === "light";
+  themeToggle.setAttribute("aria-pressed", String(isLight()));
+  themeToggle.addEventListener("click", () => {
+    const next = isLight() ? "dark" : "light";
+    if (next === "light") document.documentElement.setAttribute("data-theme", "light");
+    else document.documentElement.removeAttribute("data-theme");
+    themeToggle.setAttribute("aria-pressed", String(next === "light"));
+    store.set("theme", next);
+  });
+
+  /* ---------------------------------------------------------- áudio */
+
+  // O MP3 (≈ 210 KB) só é baixado no primeiro clique, não em toda visita.
+  let audio = null;
+  const setPlaying = on => {
+    audioBtn.setAttribute("aria-pressed", String(on));
+    label(audioBtn, on ? t("audioStop") : t("audioPlay"));
+  };
+  audioBtn.addEventListener("click", () => {
+    if (!audio) {
+      audio = new Audio("./assets/audio/greek-alphabet-pronunciation.mp3");
+      audio.addEventListener("ended", () => setPlaying(false));
+      audio.addEventListener("pause", () => setPlaying(false));
+    }
+    if (audio.paused) {
+      audio.currentTime = 0;
+      audio.play().then(() => setPlaying(true), () => setPlaying(false));
     } else {
-      logo.src = 'assets/mk-logo-white-300x.png';
-      logo.alt = 'Powered by MK (light text)';
-    }
-  }catch(e){/* ignore */}
-}
-
-const savedTheme = localStorage.getItem('theme');
-if (savedTheme === 'light' || savedTheme === 'dark'){
-  applyTheme(savedTheme === 'light' ? 'light' : 'dark');
-} else {
-  const prefersLight = window.matchMedia && window.matchMedia('(prefers-color-scheme: light)').matches;
-  applyTheme(prefersLight ? 'light' : 'dark');
-}
-
-if (themeToggle){
-  themeToggle.addEventListener('click', () => {
-    const isLight = document.documentElement.getAttribute('data-theme') === 'light';
-    const next = isLight ? 'dark' : 'light';
-    applyTheme(next);
-    localStorage.setItem('theme', next);
-  });
-}
-
-/* Audio pronunciation button: play/pause the alphabet MP3 */
-const audioBtn = document.getElementById('audioBtn');
-let alphabetAudio = null;
-try{
-  alphabetAudio = new Audio('./assets/audio/greek-alphabet-pronunciation.mp3');
-  alphabetAudio.preload = 'auto';
-}catch(e){ alphabetAudio = null; }
-
-if (audioBtn){
-  audioBtn.addEventListener('click', () => {
-    if (!alphabetAudio) return;
-    if (alphabetAudio.paused){
-      alphabetAudio.currentTime = 0;
-      alphabetAudio.play().catch(()=>{});
-      audioBtn.setAttribute('aria-pressed','true');
-    } else {
-      alphabetAudio.pause();
-      audioBtn.setAttribute('aria-pressed','false');
-    }
-  });
-}
-
-/* Language toggle: persist and apply en / pt-BR */
-const locales = {
-  'en': {
-    blockMath: 'MATHEMATICS',
-    blockProb: 'PROBABILITY',
-    blockStats: 'STATISTICS',
-    note: 'Note: notations vary between books/fields; these are the most common usages.',
-    langBtn: 'EN',
-    chartAria: 'Greek alphabet table',
-    closeAria: 'Close',
-    themeToggleLabel: 'Toggle theme',
-    themeIconAlt: 'Swap theme',
-    printIconAlt: 'Print'
-  },
-  'pt-BR': {
-    blockMath: 'MATEMÁTICA',
-    blockProb: 'PROBABILIDADE',
-    blockStats: 'ESTATÍSTICA',
-    note: 'Obs.: notações variam entre livros/áreas; aqui estão os usos mais comuns.',
-    langBtn: 'PT',
-    chartAria: 'Tabela do alfabeto grego',
-    closeAria: 'Fechar',
-    themeToggleLabel: 'Alternar tema',
-    themeIconAlt: 'Trocar tema',
-    printIconAlt: 'Imprimir'
-  }
-};
-
-const langValues = ['en', 'pt-BR'];
-let currentLang = 'en';
-
-function applyLanguage(lang){
-  if (!locales[lang]) lang = 'en';
-  currentLang = lang;
-  document.documentElement.lang = lang;
-  if (langToggle){
-    // keep aria state useful for assistive tech
-    langToggle.setAttribute('aria-pressed', String(lang === 'en'));
-    langToggle.setAttribute('aria-expanded', 'false');
-  }
-  // update language menu active state if present
-  const langMenu = document.getElementById('langMenu');
-  if (langMenu){
-    Array.from(langMenu.querySelectorAll('.lang-item')).forEach(btn => {
-      if (btn.dataset.lang === lang) btn.setAttribute('aria-checked','true');
-      else btn.removeAttribute('aria-checked');
-    });
-  }
-  if (themeToggle) themeToggle.setAttribute('aria-label', locales[lang].themeToggleLabel);
-  if (document.getElementById('themeIcon')) document.getElementById('themeIcon').alt = locales[lang].themeIconAlt;
-  if (document.getElementById('printIcon')) document.getElementById('printIcon').alt = locales[lang].printIconAlt;
-  if (document.getElementById('chart')) document.getElementById('chart').setAttribute('aria-label', locales[lang].chartAria);
-  if (closeBtn) closeBtn.setAttribute('aria-label', locales[lang].closeAria);
-}
-
-const savedLang = localStorage.getItem('lang');
-if (savedLang && locales[savedLang]){
-  applyLanguage(savedLang);
-} else {
-  // default to 'en'
-  applyLanguage('en');
-}
-
-if (langToggle){
-  const langMenu = document.getElementById('langMenu');
-  // toggle menu visibility
-  langToggle.addEventListener('click', (e) => {
-    if (!langMenu) return;
-    const open = !(langMenu.hasAttribute('hidden'));
-    if (open){
-      langMenu.setAttribute('hidden','');
-      langToggle.setAttribute('aria-expanded','false');
-    } else {
-      langMenu.removeAttribute('hidden');
-      langToggle.setAttribute('aria-expanded','true');
-      // focus first item
-      const first = langMenu.querySelector('.lang-item');
-      if (first) first.focus();
+      audio.pause();
     }
   });
 
-  // clicking outside closes menu
-  document.addEventListener('click', (e) => {
-    if (!langMenu) return;
-    const target = e.target;
-    if (!langMenu.contains(target) && target !== langToggle && !langToggle.contains(target)){
-      langMenu.setAttribute('hidden','');
-      langToggle.setAttribute('aria-expanded','false');
-    }
+  /* ---------------------------------------------------------- imprimir */
+
+  printBtn.addEventListener("click", () => {
+    closeModal();
+    window.print();
   });
 
-  // language selection
-  if (langMenu){
-    Array.from(langMenu.querySelectorAll('.lang-item')).forEach(btn => {
-      btn.addEventListener('click', () => {
-        const next = btn.dataset.lang || 'en';
-        applyLanguage(next);
-        localStorage.setItem('lang', next);
-        langMenu.setAttribute('hidden','');
-        langToggle.setAttribute('aria-expanded','false');
-      });
-    });
+  /* ---------------------------------------------------------- início */
 
-    // keyboard: Esc closes
-    langMenu.addEventListener('keydown', (e) => {
-      if (e.key === 'Escape'){
-        langMenu.setAttribute('hidden','');
-        langToggle.setAttribute('aria-expanded','false');
-        langToggle.focus();
-      }
-    });
-  }
-}
-
-if (printBtn){
-  printBtn.addEventListener('click', () => {
-    // Ensure modal is closed before printing
-    if (!backdrop.hidden) closeModal();
-    // small timeout to allow close animation/state change
-    setTimeout(() => window.print(), 120);
-  });
-}
+  render();
+  applyLanguage(lang);
+  // A tabela muda de tamanho quando as fontes chegam; o palco, quando a
+  // janela muda. Os dois disparam o ajuste, que roda uma vez por quadro.
+  const ro = new ResizeObserver(scheduleFit);
+  ro.observe(stage);
+  ro.observe(chart);
+  if (footer) ro.observe(footer);
+  if (document.fonts) document.fonts.ready.then(scheduleFit);
+  MOBILE.addEventListener("change", scheduleFit);
+  scheduleFit();
+})();

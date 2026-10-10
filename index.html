@@ -18,23 +18,36 @@
   <meta property="og:description" content="Interactive Greek alphabet study tool for STEM students — learn glyphs, pronunciations, and common math/stat usages to memorize Greek letters quickly." />
   <meta property="og:url" content="https://greekalpha.bet/" />
   <meta property="og:site_name" content="greekalpha.bet" />
-  <meta property="og:image" content="https://greekalpha.bet/theme-swap.png" />
+  <meta property="og:image" content="https://greekalpha.bet/assets/social-card.png" />
+  <meta property="og:image:width" content="1200" />
+  <meta property="og:image:height" content="630" />
+  <meta property="og:image:alt" content="The 24 Greek letters, from alpha to omega" />
 
   <!-- Twitter Card -->
   <meta name="twitter:card" content="summary_large_image" />
   <meta name="twitter:title" content="Greek Alphabet — Study & Memorize Greek Letters for STEM" />
   <meta name="twitter:description" content="Interactive Greek alphabet study tool for STEM students — learn glyphs, pronunciations, and common math/stat usages to memorize Greek letters quickly." />
-  <meta name="twitter:image" content="https://greekalpha.bet/theme-swap.png" />
+  <meta name="twitter:image" content="https://greekalpha.bet/assets/social-card.png" />
+
+  <!-- Tema antes de qualquer pintura: sem isto, quem usa o claro via um
+       piscar escuro enquanto o script.js (no fim do body) não rodava. -->
+  <script>
+    (function () {
+      var t = null;
+      try { t = localStorage.getItem('theme'); } catch (e) {}
+      if (t !== 'light' && t !== 'dark') t = matchMedia('(prefers-color-scheme: light)').matches ? 'light' : 'dark';
+      if (t === 'light') document.documentElement.setAttribute('data-theme', 'light');
+    })();
+  </script>
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600&family=GFS+Didot:ital@0;1&display=swap" rel="stylesheet">
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600&family=GFS+Didot:ital@0;1&family=Inter:wght@400;600&display=swap" rel="stylesheet">
 
   <link rel="icon" href="./assets/favicon.png" type="image/png">
-  <link rel="stylesheet" href="./style.css?v=2" />
+  <link rel="stylesheet" href="./style.css?v=3" />
 
-    <!-- Google tag (gtag.js) -->
+  <!-- Google tag (gtag.js) -->
   <script async src="https://www.googletagmanager.com/gtag/js?id=G-LGW2XK4ZKC"></script>
   <script>
     window.dataLayer = window.dataLayer || [];
@@ -69,22 +82,30 @@
   </script>
 </head>
 <body>
-  <button id="langToggle" class="lang-toggle ui-top-btn" aria-haspopup="true" aria-expanded="false" aria-label="Switch language">
-    <img id="langIcon" src="./assets/language.png" alt="Language" />
-  </button>
-  <div id="langMenu" class="lang-menu" role="menu" hidden>
-    <button class="lang-item" data-lang="en" role="menuitem">English (EN)</button>
-    <button class="lang-item" data-lang="pt-BR" role="menuitem">Português (PT)</button>
+  <!-- Botões do canto. Os rótulos (aria-label/title) vêm do script.js, na
+       língua escolhida; os daqui valem sem JavaScript. Ícones em SVG com
+       currentColor: seguem o tema sem filtros. -->
+  <div class="toolbar">
+    <button id="themeToggle" class="ui-top-btn" type="button" aria-pressed="false" aria-label="Toggle theme" title="Toggle theme">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9" fill="none" stroke="currentColor" stroke-width="2"/><path d="M12 3a9 9 0 0 1 0 18z" fill="currentColor"/></svg>
+    </button>
+    <button id="audioBtn" class="ui-top-btn" type="button" aria-pressed="false" aria-label="Play the alphabet pronunciation" title="Play the alphabet pronunciation">
+      <svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 5 6 9H2v6h4l5 4z" fill="currentColor"/><path d="M15.5 8.5a5 5 0 0 1 0 7"/><path d="M19 5a10 10 0 0 1 0 14"/></svg>
+    </button>
+    <button id="printBtn" class="ui-top-btn" type="button" aria-label="Print" title="Print">
+      <svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9V2h12v7"/><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/><path d="M6 14h12v8H6z"/></svg>
+    </button>
+    <div class="lang">
+      <button id="langToggle" class="ui-top-btn" type="button" aria-haspopup="true" aria-expanded="false" aria-controls="langMenu" aria-label="Language" title="Language">
+        <svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M2 12h20"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
+      </button>
+      <div id="langMenu" class="lang-menu" role="menu" hidden>
+        <button class="lang-item" type="button" data-lang="en" role="menuitemradio" aria-checked="false">English (EN)</button>
+        <button class="lang-item" type="button" data-lang="pt-BR" role="menuitemradio" aria-checked="false">Português (PT)</button>
+      </div>
+    </div>
   </div>
-  <button id="printBtn" class="print-toggle ui-top-btn" aria-label="Print page">
-    <img id="printIcon" src="./assets/printer.png" alt="Print" />
-  </button>
-  <button id="audioBtn" class="audio-toggle ui-top-btn" aria-pressed="false" aria-label="Pronunciar alfabeto" title="Pronunciar alfabeto">
-    <img id="audioIcon" src="./assets/audio.png" alt="Play audio" />
-  </button>
-  <button id="themeToggle" class="theme-toggle ui-top-btn" aria-pressed="false" aria-label="Toggle theme">
-    <img id="themeIcon" src="./assets/theme-swap.png" alt="Swap theme" />
-  </button>
+
   <main class="wrap">
     <div class="stage">
       <section class="chart" id="chart" aria-label="Greek alphabet table"></section>
@@ -92,13 +113,16 @@
   </main>
 
   <!-- Modal (overlay) -->
-  <div class="backdrop" id="backdrop" hidden aria-hidden="true">
+  <div class="backdrop" id="backdrop" hidden>
     <div class="modal" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
+      <button class="close" id="closeBtn" type="button" aria-label="Close">
+        <svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M6 6l12 12M18 6 6 18"/></svg>
+      </button>
 
       <div class="modal-head">
         <div class="big-glyph" id="bigGlyph">Αα</div>
         <div class="head-meta">
-          <div class="modal-title" id="modalTitle">ALPHA</div>
+          <h2 class="modal-title" id="modalTitle">ALPHA</h2>
           <div class="modal-sub" id="modalSub">ἄλφα · [a]</div>
         </div>
       </div>
@@ -107,16 +131,16 @@
     </div>
   </div>
 
-    <footer class="site-footer" role="contentinfo">
-      <div class="site-footer-inner">
-        <small>© 2026 greekalpha.bet — <a href="https://raw.githubusercontent.com/greekalpha-bet/greekalpha.bet/refs/heads/main/LICENSE">MIT License</a></small>
-        <div class="powered-by" aria-hidden="false">
-          <span class="powered-text"><strong>Powered</strong> by</span>
-          <img src="assets/mk-logo-white-300x.png" alt="Powered by MK" class="powered-by-logo" />
-        </div>
+  <footer class="site-footer">
+    <div class="site-footer-inner">
+      <small>© 2026 greekalpha.bet — <a href="https://github.com/greekalpha-bet/greekalpha.bet/blob/main/LICENSE">MIT License</a></small>
+      <div class="powered-by">
+        <span class="powered-text"><strong>Powered</strong> by</span>
+        <img src="assets/mk-logo-white-300x.png" alt="MK" class="powered-by-logo" width="61" height="20" />
       </div>
-    </footer>
+    </div>
+  </footer>
 
-  <script src="./script.js"></script>
+  <script src="./script.js?v=3"></script>
 </body>
 </html>
