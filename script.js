@@ -19,6 +19,9 @@
       copied: "Copied",
       howToWrite: "HOW TO WRITE IT — click to copy",
       letterPage: "Open this letter's page →",
+      inFormulas: "IN FORMULAS",
+      seeAt: "See it explained at morrisonkuhlsen.com →",
+      listen: "Listen",
       lower: "lowercase",
       variant: "variant",
       upper: "uppercase",
@@ -44,6 +47,9 @@
       copied: "Copiado",
       howToWrite: "COMO ESCREVER — clique para copiar",
       letterPage: "Abrir a página da letra →",
+      inFormulas: "EM FÓRMULAS",
+      seeAt: "Ver explicado no morrisonkuhlsen.com →",
+      listen: "Ouvir",
       lower: "minúscula",
       variant: "variante",
       upper: "maiúscula",
@@ -271,15 +277,45 @@
     return b;
   }
 
+  function examplesBlock(id) {
+    const list = examples[id];
+    if (!list) return "";
+    const key = lang === "pt-BR" ? "pt" : "en";
+    const box = el("section", "examples");
+    const ul = el("ul");
+    list.forEach(e => {
+      const li = el("li");
+      li.append(el("span", "ex-f", typeof e.f === "string" ? e.f : e.f[key]), el("span", "ex-d", e[key]));
+      if (e.link && e.link[key]) {
+        const a = el("a", "ex-link", t("seeAt"));
+        a.href = MK + e.link[key];
+        li.appendChild(a);
+      }
+      ul.appendChild(li);
+    });
+    box.append(el("h3", null, t("inFormulas")), ul);
+    return box;
+  }
+
+  function listenButton(id) {
+    const b = el("button", "listen");
+    b.type = "button";
+    b.dataset.listen = id;
+    b.innerHTML = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5v14l11-7z" fill="currentColor"/></svg>';
+    b.append(t("listen"));
+    return b;
+  }
+
   function fillModal(item) {
     const u = (uses[item.id] || {})[lang] || {};
     $("bigGlyph").textContent = item.glyph;
     $("modalTitle").textContent = nameOf(item);
-    $("modalSub").textContent = `${item.greek} · ${item.ipa}`;
+    $("modalSub").replaceChildren(`${item.greek} · ${item.ipa} `, listenButton(item.id));
     $("modalBody").replaceChildren(
       block(t("blockMath"), u.math),
       block(t("blockProb"), u.prob),
       block(t("blockStats"), u.stats),
+      examplesBlock(item.id),
       writingBlock(item.id) || "",
       el("p", "note", t("note")));
   }
@@ -438,24 +474,38 @@
 
   /* ---------------------------------------------------------- áudio */
 
-  // O MP3 (≈ 210 KB) só é baixado no primeiro clique, não em toda visita.
-  let audio = null;
+  // O botão do canto toca o alfabeto inteiro; o "Ouvir" de cada letra toca
+  // o arquivo dela (assets/audio/letters/, recortado por cortar-audio.mjs).
+  // Nada é baixado antes do primeiro clique.
+  let alphabet = null, clip = null;
   const setPlaying = on => {
     audioBtn.setAttribute("aria-pressed", String(on));
     label(audioBtn, on ? t("audioStop") : t("audioPlay"));
   };
+  const stopClip = () => { if (clip) { clip.pause(); clip = null; } };
+
   audioBtn.addEventListener("click", () => {
-    if (!audio) {
-      audio = new Audio("/assets/audio/greek-alphabet-pronunciation.mp3");
-      audio.addEventListener("ended", () => setPlaying(false));
-      audio.addEventListener("pause", () => setPlaying(false));
+    stopClip();
+    if (!alphabet) {
+      alphabet = new Audio("/assets/audio/greek-alphabet-pronunciation.mp3");
+      alphabet.addEventListener("ended", () => setPlaying(false));
+      alphabet.addEventListener("pause", () => setPlaying(false));
     }
-    if (audio.paused) {
-      audio.currentTime = 0;
-      audio.play().then(() => setPlaying(true), () => setPlaying(false));
+    if (alphabet.paused) {
+      alphabet.currentTime = 0;
+      alphabet.play().then(() => setPlaying(true), () => setPlaying(false));
     } else {
-      audio.pause();
+      alphabet.pause();
     }
+  });
+
+  document.addEventListener("click", e => {
+    const b = e.target.closest("[data-listen]");
+    if (!b) return;
+    if (alphabet && !alphabet.paused) alphabet.pause();
+    stopClip();
+    clip = new Audio(`/assets/audio/letters/${b.dataset.listen}.mp3`);
+    clip.play().catch(() => { clip = null; });
   });
 
   /* ---------------------------------------------------------- imprimir */

@@ -554,6 +554,62 @@ button{ font:inherit; color:inherit; }
 .powered-by-logo{ height:20px; width:auto; display:block; }
 [data-theme="light"] .powered-by-logo{ filter: invert(1); }
 
+/* ---------- EM FÓRMULAS E OUVIR ---------- */
+
+.examples{
+  grid-column: 1 / -1;
+  padding: 12px 12px 4px;
+  border-top: 1px solid var(--modal-border);
+}
+.examples h2,
+.examples h3{
+  margin: 0 0 8px;
+  font-family: "Cinzel", serif;
+  font-weight: 600;
+  letter-spacing: .08em;
+  font-size: 13px;
+  color: var(--muted-high);
+}
+.examples ul{ margin:0; padding:0; list-style:none; display:grid; gap:12px; }
+.examples li{ display:grid; gap:2px; }
+/* A fórmula numa serifada, como num livro; o texto e o link em sans. */
+.ex-f{
+  font-family: "GFS Didot", serif;
+  font-size: 19px;
+  color: var(--ink);
+}
+.ex-d{
+  font-family: var(--sans);
+  font-size: 14px;
+  line-height: 1.4;
+  color: var(--muted-med);
+}
+.ex-link{
+  width: fit-content;
+  font-family: var(--sans);
+  font-size: 13px;
+  color: var(--blue);
+}
+
+.listen{
+  display:inline-flex;
+  align-items:center;
+  gap:4px;
+  margin-left: 6px;
+  padding: 2px 10px 2px 6px;
+  border: 1px solid var(--modal-border);
+  border-radius: 999px;
+  background: var(--control-bg);
+  color: var(--blue);
+  font-family: var(--sans);
+  font-size: 12px;
+  vertical-align: middle;
+  cursor: pointer;
+}
+.listen svg{ width:14px; height:14px; }
+.listen:hover{ background: var(--control-hover); }
+.listen:focus-visible{ outline: 2px solid var(--blue); outline-offset: 2px; }
+
 /* ---------- MODAL: atalho para a página da letra ---------- */
 
 .modal-more{

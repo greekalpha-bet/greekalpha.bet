@@ -8,8 +8,9 @@
    e grafia grega); `uses`, os usos comuns de cada uma em matemática,
    probabilidade e estatística, em inglês e português; `writing`, como
    escrever cada uma (Unicode, LaTeX, HTML); `confusables`, as perguntas
-   do quiz sobre letras que se confundem; e `namesPt`, os nomes em
-   português. */
+   do quiz sobre letras que se confundem; `audioClips`, o trecho de cada
+   letra no áudio; `examples`, fórmulas em que cada letra aparece; e
+   `namesPt`, os nomes em português. */
 
 const data = [
   { id:"alpha",   glyph:"Αα", name:"ALPHA",   ipa:"[a]",  greek:"ἄλφα" },
@@ -414,6 +415,120 @@ const confusables = [
            "pt-BR": "ϑ é o teta cursivo, aberto em cima à direita; θ é o oval fechado com uma barra." } },
 ];
 
+/* Onde cada letra é pronunciada no MP3 do alfabeto, em segundos [início,
+   fim]. Medido pelas pausas entre as letras (ffmpeg silencedetect, -35 dB,
+   pausas de 0,25 s ou mais: 24 trechos, um por letra, na ordem). O
+   cortar-audio.mjs grava cada trecho em assets/audio/letters/<id>.mp3,
+   que é o que o botão "Ouvir" toca. */
+const audioClips = {
+  alpha: [0, 0.56],         beta: [1.58, 2.0],      gamma: [2.98, 3.42],    delta: [4.47, 4.92],
+  epsilon: [5.9, 6.46],     zeta: [7.46, 7.89],     eta: [8.9, 9.25],       theta: [10.29, 10.68],
+  iota: [11.67, 12.13],     kappa: [13.15, 13.5],   lambda: [14.5, 14.97],  mu: [16.0, 16.57],
+  nu: [17.55, 18.13],       xi: [19.13, 19.72],     omicron: [20.68, 21.22], pi: [22.25, 22.48],
+  rho: [23.51, 23.79],      sigma: [24.83, 25.32],  tau: [26.34, 26.6],     upsilon: [27.63, 28.2],
+  phi: [29.23, 29.85],      chi: [30.84, 31.54],    psi: [32.53, 33.09],    omega: [34.08, 34.56],
+};
+
+/* Exemplos de fórmula: onde a letra aparece de verdade. `f` em texto
+   (Unicode; um objeto { en, pt } quando a escrita muda com a língua),
+   `en`/`pt` o que é, e `link`, quando houver, a página no
+   morrisonkuhlsen.com que a explica, em cada língua. */
+const MK = "https://morrisonkuhlsen.com";
+const examples = {
+  alpha: [
+    { f: "P(rejeitar H₀ | H₀ verdadeira) = α", en: "α is the Type I error rate: the chance of rejecting a true null hypothesis.", pt: "α é a taxa de erro tipo I: a chance de rejeitar uma hipótese nula verdadeira.",
+      link: { en: "/en/formulas/statistical-power.html", pt: "/formulas/poder-estatistico.html" } },
+    { f: "IC de 1 − α:  x̄ ± z₍α/2₎ · σ/√n", en: "A confidence interval at level 1 − α (95% when α = 0.05).", pt: "Um intervalo de confiança de nível 1 − α (95% quando α = 0,05).",
+      link: { en: "/en/formulas/confidence-interval.html", pt: "/formulas/intervalo-confianca.html" } },
+  ],
+  beta: [
+    { f: "poder = 1 − β", en: "β is the Type II error rate; 1 − β, the power of a test.", pt: "β é a taxa de erro tipo II; 1 − β, o poder do teste.",
+      link: { en: "/en/formulas/statistical-power.html", pt: "/formulas/poder-estatistico.html" } },
+    { f: "y = β₀ + β₁x + ε", en: "Intercept and slope of a linear regression.", pt: "Intercepto e inclinação de uma regressão linear.",
+      link: { en: "/en/formulas/linear-regression.html", pt: "/formulas/regressao-linear.html" } },
+  ],
+  gamma: [
+    { f: "Γ(n) = (n − 1)!", en: "The Gamma function extends the factorial (here, for whole n ≥ 1).", pt: "A função Gama estende o fatorial (aqui, para n inteiro ≥ 1)." },
+  ],
+  delta: [
+    { f: "Δ = b² − 4ac", en: "The discriminant of a quadratic: it tells how many real roots there are.", pt: "O discriminante da equação do 2º grau: diz quantas raízes reais há.",
+      link: { en: "/en/formulas/quadratic-formula.html", pt: "/matematica-basica/equacao-2grau.html" } },
+    { f: "Δy / Δx", en: "Change in y over change in x: the slope between two points.", pt: "Variação de y sobre variação de x: a inclinação entre dois pontos." },
+  ],
+  epsilon: [
+    { f: "y = β₀ + β₁x + ε", en: "ε is the error term: what the line does not explain.", pt: "ε é o termo de erro: o que a reta não explica.",
+      link: { en: "/en/formulas/linear-regression.html", pt: "/formulas/regressao-linear.html" } },
+    { f: "∀ε > 0, ∃δ > 0: |x − a| < δ ⇒ |f(x) − L| < ε", en: "The ε–δ definition of a limit.", pt: "A definição de limite por ε–δ." },
+  ],
+  zeta: [
+    { f: "ζ(2) = Σ 1/n² = π²/6", en: "The Riemann zeta function at 2 (the Basel problem).", pt: "A função zeta de Riemann em 2 (o problema da Basileia)." },
+  ],
+  eta: [
+    { f: "η² = SQ_entre / SQ_total", en: "Effect size in ANOVA: the share of the variation explained by the groups.", pt: "Tamanho de efeito na ANOVA: a fração da variação explicada pelos grupos.",
+      link: { en: "/en/statistical-tests/one-way-anova/", pt: "/testes-estatisticos/anova/" } },
+  ],
+  theta: [
+    { f: "θ̂ = argmax L(θ)", en: "The maximum likelihood estimate of a parameter θ.", pt: "A estimativa de máxima verossimilhança de um parâmetro θ." },
+    { f: { en: "x = r cos θ,  y = r sin θ", pt: "x = r cos θ,  y = r sen θ" }, en: "Polar coordinates: θ is the angle.", pt: "Coordenadas polares: θ é o ângulo." },
+  ],
+  kappa: [
+    { f: "κ = (pₒ − pₑ) / (1 − pₑ)", en: "Cohen's kappa: agreement between two raters beyond chance.", pt: "Kappa de Cohen: concordância entre dois avaliadores além do acaso.",
+      link: { en: "/en/statistical-tests/cohens-kappa/", pt: "/testes-estatisticos/kappa/" } },
+  ],
+  lambda: [
+    { f: "P(X = k) = λᵏ e^(−λ) / k!", en: "The Poisson distribution: λ is the average rate of events.", pt: "A distribuição de Poisson: λ é a taxa média de eventos.",
+      link: { en: "/en/formulas/poisson-distribution.html", pt: "/formulas/distribuicao-poisson.html" } },
+    { f: "Av = λv", en: "λ is an eigenvalue of the matrix A.", pt: "λ é um autovalor da matriz A." },
+  ],
+  mu: [
+    { f: "Z = (X − μ) / σ", en: "Standardising: how many standard deviations X is from the mean μ.", pt: "Padronização: a quantos desvios-padrão X está da média μ.",
+      link: { en: "/en/formulas/z-score.html", pt: "/formulas/z-score.html" } },
+  ],
+  nu: [
+    { f: "t ~ t(ν),  ν = n − 1", en: "ν is the degrees of freedom of the t distribution.", pt: "ν são os graus de liberdade da distribuição t.",
+      link: { en: "/en/formulas/students-t-test.html", pt: "/formulas/t-student.html" } },
+  ],
+  pi: [
+    { f: "f(x) = e^(−(x − μ)²/(2σ²)) / (σ√(2π))", en: "π in the normal density: it makes the area under the curve equal 1.", pt: "π na densidade normal: é o que faz a área sob a curva dar 1.",
+      link: { en: "/en/formulas/normal-distribution.html", pt: "/formulas/distribuicao-normal.html" } },
+    { f: "C = 2πr", en: "π is the ratio of a circle's circumference to its diameter.", pt: "π é a razão entre o comprimento da circunferência e o diâmetro.",
+      link: { pt: "/matematica-basica/constantes.html#pi" } },
+    { f: "Π xᵢ = x₁ · x₂ · … · xₙ", en: "The uppercase Π is the product operator, as Σ is for sums.", pt: "O Π maiúsculo é o operador produto, como o Σ é o da soma." },
+  ],
+  rho: [
+    { f: "ρ = Cov(X, Y) / (σₓ σᵧ)", en: "The population correlation between X and Y.", pt: "A correlação populacional entre X e Y.",
+      link: { en: "/en/formulas/pearson-correlation.html", pt: "/formulas/coeficiente-pearson.html" } },
+    { f: "ρₛ = 1 − 6 Σ dᵢ² / (n(n² − 1))", en: "Spearman's rank correlation (without ties).", pt: "A correlação de postos de Spearman (sem empates).",
+      link: { en: "/en/statistical-tests/spearman-correlation/", pt: "/testes-estatisticos/spearman/" } },
+  ],
+  sigma: [
+    { f: "Z = (X − μ) / σ", en: "σ, the population standard deviation, is the unit of the z-score.", pt: "σ, o desvio-padrão populacional, é a unidade do escore z.",
+      link: { en: "/en/formulas/z-score.html", pt: "/formulas/z-score.html" } },
+    { f: "Σ xᵢ = x₁ + x₂ + … + xₙ", en: "The uppercase Σ is the summation operator.", pt: "O Σ maiúsculo é o operador de somatório." },
+  ],
+  tau: [
+    { f: "τ = (C − D) / (n(n − 1)/2)", en: "Kendall's tau: concordant minus discordant pairs, over all pairs.", pt: "O tau de Kendall: pares concordantes menos discordantes, sobre todos os pares.",
+      link: { en: "/en/statistical-tests/kendall-tau/", pt: "/testes-estatisticos/kendall/" } },
+  ],
+  phi: [
+    { f: "Φ(z) = P(Z ≤ z)", en: "Φ is the cumulative distribution function of the standard normal.", pt: "Φ é a função de distribuição acumulada da normal padrão.",
+      link: { en: "/ztable.html", pt: "/ztable.html" } },
+    { f: { en: "φ = (1 + √5) / 2 ≈ 1.618", pt: "φ = (1 + √5) / 2 ≈ 1,618" }, en: "φ is also the golden ratio.", pt: "φ também é a razão áurea.",
+      link: { pt: "/matematica-basica/constantes.html#phi" } },
+  ],
+  chi: [
+    { f: "χ² = Σ (O − E)² / E", en: "The chi-square statistic: observed against expected counts.", pt: "A estatística qui-quadrado: contagens observadas contra esperadas.",
+      link: { en: "/en/formulas/chi-square-test.html", pt: "/formulas/qui-quadrado.html" } },
+  ],
+  psi: [
+    { f: "ψ(x) = d/dx ln Γ(x)", en: "The digamma function, the derivative of the log of Γ.", pt: "A função digama, a derivada do logaritmo de Γ." },
+  ],
+  omega: [
+    { f: "P(Ω) = 1", en: "Ω is the sample space: everything that can happen has probability 1.", pt: "Ω é o espaço amostral: tudo o que pode acontecer tem probabilidade 1.",
+      link: { pt: "/matematica-basica/conjuntos.html" } },
+  ],
+};
+
 /* Nomes em português, para as páginas em /pt/: o rótulo (maiúsculas, como
    na tabela) e o slug do endereço (sem acento). */
 const namesPt = {
@@ -429,4 +544,4 @@ const namesPt = {
 
 // No navegador estes dados ficam no escopo global (os scripts clássicos o
 // dividem); no Node, o build.mjs os importa por aqui.
-if (typeof module !== "undefined") module.exports = { data, uses, writing, confusables, namesPt };
+if (typeof module !== "undefined") module.exports = { data, uses, writing, confusables, namesPt, audioClips, examples, MK };

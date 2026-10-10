@@ -15,9 +15,9 @@ import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
 
 const ROOT = dirname(fileURLToPath(import.meta.url));
-const { data, uses, writing, confusables, namesPt } = createRequire(import.meta.url)("./data.js");
+const { data, uses, writing, confusables, namesPt, examples, MK } = createRequire(import.meta.url)("./data.js");
 const SITE = "https://greekalpha.bet";
-const VERSION = "5"; // muda quando o CSS/JS mudam, para furar o cache
+const VERSION = "7"; // muda quando o CSS/JS mudam, para furar o cache
 
 // 1st, 2nd, 3rd, 4th… 11th, 12th, 13th… 21st, 22nd.
 const ordinal = n => {
@@ -45,6 +45,7 @@ const T = {
     howToWrite: "HOW TO WRITE IT — click to copy", lower: "lowercase", variant: "variant", upper: "uppercase",
     latinUpper: "same as the Latin letter: LaTeX has no command for it", copy: "Copy",
     dontConfuse: "DON'T CONFUSE IT",
+    inFormulas: "IN FORMULAS", seeAt: "See it explained at morrisonkuhlsen.com →", listen: "Listen",
     all: "All letters", prev: "Previous", nextLetter: "Next",
     position: n => `The ${ordinal(n)} letter of the Greek alphabet.`,
     letterTitle: (name, gl) => `${name} (${gl}) — Greek letter in math and statistics | greekalpha.bet`,
@@ -66,6 +67,7 @@ const T = {
     howToWrite: "COMO ESCREVER — clique para copiar", lower: "minúscula", variant: "variante", upper: "maiúscula",
     latinUpper: "igual à letra latina: o LaTeX não tem comando para ela", copy: "Copiar",
     dontConfuse: "NÃO CONFUNDA",
+    inFormulas: "EM FÓRMULAS", seeAt: "Ver explicado no morrisonkuhlsen.com →", listen: "Ouvir",
     all: "Todas as letras", prev: "Anterior", nextLetter: "Próxima",
     position: n => `A ${n}ª letra do alfabeto grego.`,
     letterTitle: (name, gl) => `${name} (${gl}) — a letra grega na matemática e na estatística | greekalpha.bet`,
@@ -87,6 +89,7 @@ const ICONS = {
   audio: '<svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 5 6 9H2v6h4l5 4z" fill="currentColor"/><path d="M15.5 8.5a5 5 0 0 1 0 7"/><path d="M19 5a10 10 0 0 1 0 14"/></svg>',
   print: '<svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9V2h12v7"/><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/><path d="M6 14h12v8H6z"/></svg>',
   globe: '<svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M2 12h20"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>',
+  play: '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5v14l11-7z" fill="currentColor"/></svg>',
   close: '<svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M6 6l12 12M18 6 6 18"/></svg>',
 };
 
@@ -289,6 +292,19 @@ function writingHtml(item, lang) {
   return `<section class="writing"><h2>${t.howToWrite}</h2><div class="writing-rows">${rows.join("")}</div></section>`;
 }
 
+// Fórmulas em que a letra aparece, com o link para a explicação no
+// morrisonkuhlsen.com quando há uma na língua da página.
+function examplesHtml(item, lang) {
+  const t = T[lang], list = examples[item.id];
+  if (!list) return "";
+  const li = e => {
+    const f = typeof e.f === "string" ? e.f : e.f[lang];
+    const link = e.link && e.link[lang];
+    return `<li><span class="ex-f">${esc(f)}</span><span class="ex-d">${esc(e[lang])}</span>${link ? `<a class="ex-link" href="${MK}${link}">${t.seeAt}</a>` : ""}</li>`;
+  };
+  return `<section class="examples"><h2>${t.inFormulas}</h2><ul>${list.map(li).join("")}</ul></section>`;
+}
+
 // As perguntas do quiz sobre esta letra viram "não confunda": as que a têm
 // como resposta e as em que ela é a primeira alternativa errada, que é
 // sempre a parecida (Σ em "qual é o somatório ∑?", ε em "qual é o ∈?").
@@ -329,12 +345,13 @@ function letter(item, i, lang) {
         <div class="big-glyph" lang="el">${item.glyph}</div>
         <div class="head-meta">
           <h1 class="modal-title">${nameOf(item, lang)}</h1>
-          <div class="modal-sub"><span lang="el">${item.greek}</span> · ${item.ipa}</div>
+          <div class="modal-sub"><span lang="el">${item.greek}</span> · ${item.ipa} <button type="button" class="listen" data-listen="${item.id}">${ICONS.play}${t.listen}</button></div>
           <p class="letter-pos">${t.position(i + 1)}</p>
         </div>
       </header>
       <div class="modal-body">
         ${usesHtml(item, lang)}
+        ${examplesHtml(item, lang)}
         ${writingHtml(item, lang)}
         ${confusionHtml(item, lang)}
         <p class="note">${t.note}</p>
