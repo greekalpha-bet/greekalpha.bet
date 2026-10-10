@@ -1,5 +1,5 @@
 // Gerado pelo build.mjs: não edite à mão.
-const CACHE = "greekalpha-8";
+const CACHE = "greekalpha-9";
 const PRECACHE = [
   "/",
   "/cheat-sheet/",
@@ -53,9 +53,9 @@ const PRECACHE = [
   "/pt/qui/",
   "/pt/psi/",
   "/pt/omega/",
-  "/style.css?v=8",
-  "/data.js?v=8",
-  "/script.js?v=8",
+  "/style.css?v=9",
+  "/data.js?v=9",
+  "/script.js?v=9",
   "/assets/favicon.png",
   "/assets/icon-192.png",
   "/assets/mk-logo-white-300x.png"

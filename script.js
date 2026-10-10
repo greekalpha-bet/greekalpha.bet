@@ -107,12 +107,19 @@
   const t = key => I18N[lang][key];
   const label = (btn, text) => { btn.setAttribute("aria-label", text); btn.title = text; };
 
-  // Na página inicial, quem usou a outra língua da última vez volta direto
-  // para ela. Nas páginas de letra, nunca: quem chega a /pt/sigma/ por uma
-  // busca quer aquela página. E nada de decidir pelo idioma do navegador,
-  // que o Google desaconselha.
+  // Só a página inicial em inglês (/) manda para /pt/ quem usou o português
+  // da última vez — ela é a entrada padrão do site. Nenhuma outra página
+  // redireciona: quem abre /pt/ ou /pt/sigma/ (por link, busca ou digitando)
+  // fica nela. E nada de decidir pelo idioma do navegador, que o Google
+  // desaconselha.
+  // O return é essencial: o script não pode continuar e gravar a língua
+  // desta página antes de sair dela. Era isso que fazia / e /pt/ se
+  // mandarem um para o outro sem parar.
   const otherLink = langMenu.querySelector("a.lang-item");
-  if (chart && otherLink && store.get("lang") === otherLink.dataset.lang) location.replace(otherLink.href);
+  if (chart && lang === "en" && otherLink && store.get("lang") === "pt-BR") {
+    location.replace(otherLink.href);
+    return;
+  }
 
   function closeMenu(focusToggle) {
     langMenu.hidden = true;

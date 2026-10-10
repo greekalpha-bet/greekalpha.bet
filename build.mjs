@@ -17,7 +17,7 @@ import { fileURLToPath } from "node:url";
 const ROOT = dirname(fileURLToPath(import.meta.url));
 const { data, uses, writing, confusables, namesPt, examples, MK, modern } = createRequire(import.meta.url)("./data.js");
 const SITE = "https://greekalpha.bet";
-const VERSION = "8"; // muda quando o CSS/JS mudam, para furar o cache
+const VERSION = "9"; // muda quando o CSS/JS mudam, para furar o cache
 
 // 1st, 2nd, 3rd, 4th… 11th, 12th, 13th… 21st, 22nd.
 const ordinal = n => {
