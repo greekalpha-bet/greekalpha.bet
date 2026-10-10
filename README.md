@@ -9,6 +9,7 @@ Uma ferramenta interativa para estudar o alfabeto grego, com glyphs, pronúncia 
 - Uma página por letra, com usos, como escrever (Unicode, LaTeX, HTML) e letras com que não confundir
 - Modal com informações (grafia, pronúncia, usos) e cópia com um clique
 - Quiz com repetição espaçada (glifo → nome, nome → glifo, letras parecidas)
+- Pronúncia de cada letra, e exemplos de fórmula com links para explicações no morrisonkuhlsen.com
 - Troca de tema (claro/escuro)
 - Áudio de pronúncia: `assets/audio/greek-alphabet-pronunciation.mp3`
 - Alternância de idioma (EN / PT-BR)
@@ -34,6 +35,7 @@ npx serve .
 ## Estrutura
 - [data.js](data.js) — **a única fonte dos dados**: as letras, os usos (EN/PT), como escrever cada uma (Unicode, LaTeX, HTML), as perguntas de letras parecidas e os nomes em português
 - [build.mjs](build.mjs) — gera o HTML estático a partir do `data.js`
+- [cortar-audio.mjs](cortar-audio.mjs) — recorta o MP3 do alfabeto em um arquivo por letra (`assets/audio/letters/`), pelos trechos de `audioClips` no `data.js`; requer o ffmpeg e só precisa rodar quando o áudio mudar
 - [script.js](script.js) — a interface (modal, quiz, cópia, tema, áudio, ajuste da tabela à tela)
 - [style.css](style.css) — estilos
 - assets/ — imagens e áudio
