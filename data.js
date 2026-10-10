@@ -9,8 +9,9 @@
    probabilidade e estatística, em inglês e português; `writing`, como
    escrever cada uma (Unicode, LaTeX, HTML); `confusables`, as perguntas
    do quiz sobre letras que se confundem; `audioClips`, o trecho de cada
-   letra no áudio; `examples`, fórmulas em que cada letra aparece; e
-   `namesPt`, os nomes em português. */
+   letra no áudio; `examples`, fórmulas em que cada letra aparece;
+   `modern`, a pronúncia no grego moderno; e `namesPt`, os nomes em
+   português. */
 
 const data = [
   { id:"alpha",   glyph:"Αα", name:"ALPHA",   ipa:"[a]",  greek:"ἄλφα" },
@@ -529,6 +530,38 @@ const examples = {
   ],
 };
 
+/* Grego moderno: [nome da letra em grego moderno, como se pronuncia o
+   nome, o som da letra]. O `ipa` de `data` é o do grego antigo. Onde o som
+   muda conforme a vogal seguinte, `antes de e/i` traz a variante (γ, κ, χ).
+   Notação: [ɣ] é um g fricativo, [ð] o "th" de "this", [θ] o de "think",
+   [x] o "rr" carioca, [ç] o "ch" alemão de "ich", [ʝ] um "i" fricativo. */
+const modern = {
+  alpha:   ["άλφα", "[ˈalfa]", "[a]"],
+  beta:    ["βήτα", "[ˈvita]", "[v]"],
+  gamma:   ["γάμμα", "[ˈɣama]", "[ɣ]", "[ʝ]"],
+  delta:   ["δέλτα", "[ˈðelta]", "[ð]"],
+  epsilon: ["έψιλον", "[ˈepsilon]", "[e]"],
+  zeta:    ["ζήτα", "[ˈzita]", "[z]"],
+  eta:     ["ήτα", "[ˈita]", "[i]"],
+  theta:   ["θήτα", "[ˈθita]", "[θ]"],
+  iota:    ["γιώτα", "[ˈʝota]", "[i]"],
+  kappa:   ["κάππα", "[ˈkapa]", "[k]", "[c]"],
+  lambda:  ["λάμδα", "[ˈlamða]", "[l]"],
+  mu:      ["μι", "[mi]", "[m]"],
+  nu:      ["νι", "[ni]", "[n]"],
+  xi:      ["ξι", "[ksi]", "[ks]"],
+  omicron: ["όμικρον", "[ˈomikron]", "[o]"],
+  pi:      ["πι", "[pi]", "[p]"],
+  rho:     ["ρο", "[ro]", "[r]"],
+  sigma:   ["σίγμα", "[ˈsiɣma]", "[s]"],
+  tau:     ["ταυ", "[taf]", "[t]"],
+  upsilon: ["ύψιλον", "[ˈipsilon]", "[i]"],
+  phi:     ["φι", "[fi]", "[f]"],
+  chi:     ["χι", "[çi]", "[x]", "[ç]"],
+  psi:     ["ψι", "[psi]", "[ps]"],
+  omega:   ["ωμέγα", "[oˈmeɣa]", "[o]"],
+};
+
 /* Nomes em português, para as páginas em /pt/: o rótulo (maiúsculas, como
    na tabela) e o slug do endereço (sem acento). */
 const namesPt = {
@@ -544,4 +577,4 @@ const namesPt = {
 
 // No navegador estes dados ficam no escopo global (os scripts clássicos o
 // dividem); no Node, o build.mjs os importa por aqui.
-if (typeof module !== "undefined") module.exports = { data, uses, writing, confusables, namesPt, audioClips, examples, MK };
+if (typeof module !== "undefined") module.exports = { data, uses, writing, confusables, namesPt, audioClips, examples, MK, modern };

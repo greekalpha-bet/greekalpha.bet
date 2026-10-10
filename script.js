@@ -22,6 +22,11 @@
       inFormulas: "IN FORMULAS",
       seeAt: "See it explained at morrisonkuhlsen.com →",
       listen: "Listen",
+      pronunciation: "PRONUNCIATION",
+      ancient: "Ancient Greek",
+      modernGreek: "Modern Greek",
+      sound: "sound",
+      beforeEI: "before e/i",
       lower: "lowercase",
       variant: "variant",
       upper: "uppercase",
@@ -50,6 +55,11 @@
       inFormulas: "EM FÓRMULAS",
       seeAt: "Ver explicado no morrisonkuhlsen.com →",
       listen: "Ouvir",
+      pronunciation: "PRONÚNCIA",
+      ancient: "Grego antigo",
+      modernGreek: "Grego moderno",
+      sound: "som",
+      beforeEI: "antes de e/i",
       lower: "minúscula",
       variant: "variante",
       upper: "maiúscula",
@@ -297,6 +307,19 @@
     return box;
   }
 
+  function pronBlock(item) {
+    const [nome, nomeIpa, som, antes] = modern[item.id];
+    const box = el("section", "pron");
+    const dl = el("dl");
+    const greek = el("span", null, nome);
+    greek.lang = "el";
+    const dd2 = el("dd");
+    dd2.append(greek, ` ${nomeIpa} · ${t("sound")} ${som}${antes ? ` (${t("beforeEI")}: ${antes})` : ""}`);
+    dl.append(el("dt", null, t("ancient")), el("dd", null, `${t("sound")} ${item.ipa}`), el("dt", null, t("modernGreek")), dd2);
+    box.append(el("h3", null, t("pronunciation")), dl);
+    return box;
+  }
+
   function listenButton(id) {
     const b = el("button", "listen");
     b.type = "button";
@@ -315,6 +338,7 @@
       block(t("blockMath"), u.math),
       block(t("blockProb"), u.prob),
       block(t("blockStats"), u.stats),
+      pronBlock(item),
       examplesBlock(item.id),
       writingBlock(item.id) || "",
       el("p", "note", t("note")));
@@ -514,6 +538,13 @@
     closeModal();
     window.print();
   });
+
+  /* ---------------------------------------------------------- offline */
+
+  // O sw.js (gerado pelo build) guarda o site para abrir sem internet.
+  if ("serviceWorker" in navigator) {
+    addEventListener("load", () => navigator.serviceWorker.register("/sw.js").catch(() => {}));
+  }
 
   /* ---------------------------------------------------------- início */
 
