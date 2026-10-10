@@ -3,34 +3,29 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Greek Alphabet — Study & Memorize Greek Letters for STEM | greekalpha.bet</title>
-
-  <meta name="description" content="Interactive Greek alphabet study tool for STEM students — learn glyphs, pronunciations, and common math/stat usages to memorize Greek letters quickly." />
-  <meta name="keywords" content="Greek alphabet, memorize greek letters, greek letters for math, greek letters for statistics, greek pronunciation, STEM study" />
-  <meta name="author" content="greekalpha.bet" />
-  <meta name="robots" content="index, follow" />
+  <title>Greek Alphabet — Study &amp; Memorize Greek Letters for STEM | greekalpha.bet</title>
+  <meta name="description" content="Interactive Greek alphabet study tool for STEM students — learn glyphs, pronunciations, LaTeX and common math/stat usages, and practice with a quiz." />
   <link rel="canonical" href="https://greekalpha.bet/" />
+  <link rel="alternate" hreflang="en" href="https://greekalpha.bet/" />
+  <link rel="alternate" hreflang="pt-BR" href="https://greekalpha.bet/pt/" />
+  <link rel="alternate" hreflang="x-default" href="https://greekalpha.bet/" />
   <meta name="theme-color" content="#0b0e14" />
 
-  <!-- Open Graph -->
   <meta property="og:type" content="website" />
-  <meta property="og:title" content="Greek Alphabet — Study & Memorize Greek Letters for STEM" />
-  <meta property="og:description" content="Interactive Greek alphabet study tool for STEM students — learn glyphs, pronunciations, and common math/stat usages to memorize Greek letters quickly." />
+  <meta property="og:title" content="Greek Alphabet — Study &amp; Memorize Greek Letters for STEM | greekalpha.bet" />
+  <meta property="og:description" content="Interactive Greek alphabet study tool for STEM students — learn glyphs, pronunciations, LaTeX and common math/stat usages, and practice with a quiz." />
   <meta property="og:url" content="https://greekalpha.bet/" />
   <meta property="og:site_name" content="greekalpha.bet" />
+  <meta property="og:locale" content="en_US" />
   <meta property="og:image" content="https://greekalpha.bet/assets/social-card.png" />
   <meta property="og:image:width" content="1200" />
   <meta property="og:image:height" content="630" />
-  <meta property="og:image:alt" content="The 24 Greek letters, from alpha to omega" />
-
-  <!-- Twitter Card -->
   <meta name="twitter:card" content="summary_large_image" />
-  <meta name="twitter:title" content="Greek Alphabet — Study & Memorize Greek Letters for STEM" />
-  <meta name="twitter:description" content="Interactive Greek alphabet study tool for STEM students — learn glyphs, pronunciations, and common math/stat usages to memorize Greek letters quickly." />
+  <meta name="twitter:title" content="Greek Alphabet — Study &amp; Memorize Greek Letters for STEM | greekalpha.bet" />
+  <meta name="twitter:description" content="Interactive Greek alphabet study tool for STEM students — learn glyphs, pronunciations, LaTeX and common math/stat usages, and practice with a quiz." />
   <meta name="twitter:image" content="https://greekalpha.bet/assets/social-card.png" />
 
-  <!-- Tema antes de qualquer pintura: sem isto, quem usa o claro via um
-       piscar escuro enquanto o script.js (no fim do body) não rodava. -->
+  <!-- Tema antes de qualquer pintura (sem piscar escuro no tema claro). -->
   <script>
     (function () {
       var t = null;
@@ -43,21 +38,19 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600&family=GFS+Didot:ital@0;1&family=Inter:wght@400;600&display=swap" rel="stylesheet">
+  <link rel="icon" href="/assets/favicon.png" type="image/png">
+  <link rel="apple-touch-icon" href="/assets/icon-180.png">
+  <link rel="manifest" href="/manifest.webmanifest">
+  <link rel="stylesheet" href="/style.css?v=8" />
 
-  <link rel="icon" href="./assets/favicon.png" type="image/png">
-  <link rel="stylesheet" href="./style.css?v=3" />
-
-  <!-- Google tag (gtag.js) -->
   <script async src="https://www.googletagmanager.com/gtag/js?id=G-LGW2XK4ZKC"></script>
   <script>
     window.dataLayer = window.dataLayer || [];
     function gtag(){dataLayer.push(arguments);}
     gtag('js', new Date());
-
     gtag('config', 'G-LGW2XK4ZKC');
   </script>
 
-  <!-- Structured data: WebSite / WebPage -->
   <script type="application/ld+json">
   {
     "@context": "https://schema.org",
@@ -66,81 +59,101 @@
         "@type": "WebSite",
         "@id": "https://greekalpha.bet/#website",
         "url": "https://greekalpha.bet/",
-        "name": "greekalpha.bet",
-        "inLanguage": "en"
+        "name": "greekalpha.bet"
       },
       {
         "@type": "WebPage",
         "@id": "https://greekalpha.bet/#webpage",
         "url": "https://greekalpha.bet/",
         "name": "Greek Alphabet — Study & Memorize Greek Letters for STEM",
-        "description": "Interactive Greek alphabet study tool for STEM students — learn glyphs, pronunciations, and common math/stat usages to memorize Greek letters quickly.",
-        "inLanguage": "en"
+        "description": "Interactive Greek alphabet study tool for STEM students — learn glyphs, pronunciations, LaTeX and common math/stat usages, and practice with a quiz.",
+        "inLanguage": "en",
+        "isPartOf": {
+          "@id": "https://greekalpha.bet/#website"
+        }
       }
     ]
   }
   </script>
 </head>
 <body>
-  <!-- Botões do canto. Os rótulos (aria-label/title) vêm do script.js, na
-       língua escolhida; os daqui valem sem JavaScript. Ícones em SVG com
-       currentColor: seguem o tema sem filtros. -->
   <div class="toolbar">
-    <button id="themeToggle" class="ui-top-btn" type="button" aria-pressed="false" aria-label="Toggle theme" title="Toggle theme">
-      <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9" fill="none" stroke="currentColor" stroke-width="2"/><path d="M12 3a9 9 0 0 1 0 18z" fill="currentColor"/></svg>
-    </button>
-    <button id="audioBtn" class="ui-top-btn" type="button" aria-pressed="false" aria-label="Play the alphabet pronunciation" title="Play the alphabet pronunciation">
-      <svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 5 6 9H2v6h4l5 4z" fill="currentColor"/><path d="M15.5 8.5a5 5 0 0 1 0 7"/><path d="M19 5a10 10 0 0 1 0 14"/></svg>
-    </button>
-    <button id="printBtn" class="ui-top-btn" type="button" aria-label="Print" title="Print">
-      <svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9V2h12v7"/><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/><path d="M6 14h12v8H6z"/></svg>
-    </button>
+    <button id="quizBtn" class="ui-top-btn quiz-btn" type="button" aria-label="Practice: quiz" title="Practice: quiz">Quiz</button>
+    <button id="themeToggle" class="ui-top-btn" type="button" aria-pressed="false" aria-label="Toggle theme" title="Toggle theme"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9" fill="none" stroke="currentColor" stroke-width="2"/><path d="M12 3a9 9 0 0 1 0 18z" fill="currentColor"/></svg></button>
+    <button id="audioBtn" class="ui-top-btn" type="button" aria-pressed="false" aria-label="Play the alphabet pronunciation" title="Play the alphabet pronunciation"><svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 5 6 9H2v6h4l5 4z" fill="currentColor"/><path d="M15.5 8.5a5 5 0 0 1 0 7"/><path d="M19 5a10 10 0 0 1 0 14"/></svg></button>
+    <button id="printBtn" class="ui-top-btn" type="button" aria-label="Print" title="Print"><svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9V2h12v7"/><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/><path d="M6 14h12v8H6z"/></svg></button>
     <div class="lang">
-      <button id="langToggle" class="ui-top-btn" type="button" aria-haspopup="true" aria-expanded="false" aria-controls="langMenu" aria-label="Language" title="Language">
-        <svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M2 12h20"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
-      </button>
-      <div id="langMenu" class="lang-menu" role="menu" hidden>
-        <button class="lang-item" type="button" data-lang="en" role="menuitemradio" aria-checked="false">English (EN)</button>
-        <button class="lang-item" type="button" data-lang="pt-BR" role="menuitemradio" aria-checked="false">Português (PT)</button>
+      <button id="langToggle" class="ui-top-btn" type="button" aria-haspopup="true" aria-expanded="false" aria-controls="langMenu" aria-label="Language" title="Language"><svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M2 12h20"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg></button>
+      <div id="langMenu" class="lang-menu" hidden>
+        <a class="lang-item" href="/pt/" hreflang="pt-BR" lang="pt-BR" data-lang="pt-BR">Português (PT)</a>
+        <span class="lang-item is-current" aria-current="true">English (EN)</span>
       </div>
     </div>
   </div>
 
   <main class="wrap">
+    <h1 class="visually-hidden">Greek alphabet</h1>
     <div class="stage">
-      <section class="chart" id="chart" aria-label="Greek alphabet table"></section>
+      <section class="chart" id="chart" aria-label="Greek alphabet table">
+        <div class="row"><a class="cell" href="/alpha/" data-id="alpha"><span class="glyph">Αα</span><span class="meta"><span class="latin"><span class="name">ALPHA</span><span class="ipa">[a]</span></span><span class="greek">ἄλφα</span></span></a><a class="cell" href="/beta/" data-id="beta"><span class="glyph">Ββ</span><span class="meta"><span class="latin"><span class="name">BETA</span><span class="ipa">[b]</span></span><span class="greek">βῆτα</span></span></a><a class="cell" href="/gamma/" data-id="gamma"><span class="glyph">Γγ</span><span class="meta"><span class="latin"><span class="name">GAMMA</span><span class="ipa">[g]</span></span><span class="greek">γάμμα</span></span></a><a class="cell" href="/delta/" data-id="delta"><span class="glyph">Δδ</span><span class="meta"><span class="latin"><span class="name">DELTA</span><span class="ipa">[d]</span></span><span class="greek">δέλτα</span></span></a><a class="cell" href="/epsilon/" data-id="epsilon"><span class="glyph">Εε</span><span class="meta"><span class="latin"><span class="name">EPSILON</span><span class="ipa">[e]</span></span><span class="greek">ἐ ψιλόν</span></span></a><a class="cell" href="/zeta/" data-id="zeta"><span class="glyph">Ζζ</span><span class="meta"><span class="latin"><span class="name">ZETA</span><span class="ipa">[dz]</span></span><span class="greek">ζῆτα</span></span></a></div>
+        <div class="rule"></div>
+        <div class="row"><a class="cell" href="/eta/" data-id="eta"><span class="glyph">Ηη</span><span class="meta"><span class="latin"><span class="name">ETA</span><span class="ipa">[ɛː]</span></span><span class="greek">ἦτα</span></span></a><a class="cell" href="/theta/" data-id="theta"><span class="glyph">Θθ</span><span class="meta"><span class="latin"><span class="name">THETA</span><span class="ipa">[tʰ]</span></span><span class="greek">θῆτα</span></span></a><a class="cell" href="/iota/" data-id="iota"><span class="glyph">Ιι</span><span class="meta"><span class="latin"><span class="name">IOTA</span><span class="ipa">[i]</span></span><span class="greek">ἰῶτα</span></span></a><a class="cell" href="/kappa/" data-id="kappa"><span class="glyph">Κκ</span><span class="meta"><span class="latin"><span class="name">KAPPA</span><span class="ipa">[k]</span></span><span class="greek">κάππα</span></span></a><a class="cell" href="/lambda/" data-id="lambda"><span class="glyph">Λλ</span><span class="meta"><span class="latin"><span class="name">LAMBDA</span><span class="ipa">[l]</span></span><span class="greek">λάμβδα</span></span></a><a class="cell" href="/mu/" data-id="mu"><span class="glyph">Μμ</span><span class="meta"><span class="latin"><span class="name">MU</span><span class="ipa">[m]</span></span><span class="greek">μῦ</span></span></a></div>
+        <div class="rule"></div>
+        <div class="row"><a class="cell" href="/nu/" data-id="nu"><span class="glyph">Νν</span><span class="meta"><span class="latin"><span class="name">NU</span><span class="ipa">[n]</span></span><span class="greek">νῦ</span></span></a><a class="cell" href="/xi/" data-id="xi"><span class="glyph">Ξξ</span><span class="meta"><span class="latin"><span class="name">XI</span><span class="ipa">[ks]</span></span><span class="greek">ξεῖ</span></span></a><a class="cell" href="/omicron/" data-id="omicron"><span class="glyph">Οο</span><span class="meta"><span class="latin"><span class="name">OMICRON</span><span class="ipa">[o]</span></span><span class="greek">ὂ μικρόν</span></span></a><a class="cell" href="/pi/" data-id="pi"><span class="glyph">Ππ</span><span class="meta"><span class="latin"><span class="name">PI</span><span class="ipa">[p]</span></span><span class="greek">πεῖ</span></span></a><a class="cell" href="/rho/" data-id="rho"><span class="glyph">Ρρ</span><span class="meta"><span class="latin"><span class="name">RHO</span><span class="ipa">[r]</span></span><span class="greek">ῥῶ</span></span></a><a class="cell" href="/sigma/" data-id="sigma"><span class="glyph">Σσς</span><span class="meta"><span class="latin"><span class="name">SIGMA</span><span class="ipa">[s]</span></span><span class="greek">σίγμα</span></span></a></div>
+        <div class="rule"></div>
+        <div class="row"><a class="cell" href="/tau/" data-id="tau"><span class="glyph">Ττ</span><span class="meta"><span class="latin"><span class="name">TAU</span><span class="ipa">[t]</span></span><span class="greek">ταῦ</span></span></a><a class="cell" href="/upsilon/" data-id="upsilon"><span class="glyph">Υυ</span><span class="meta"><span class="latin"><span class="name">UPSILON</span><span class="ipa">[u]</span></span><span class="greek">ὖ ψιλόν</span></span></a><a class="cell" href="/phi/" data-id="phi"><span class="glyph">Φφ</span><span class="meta"><span class="latin"><span class="name">PHI</span><span class="ipa">[pʰ]</span></span><span class="greek">φεῖ</span></span></a><a class="cell" href="/chi/" data-id="chi"><span class="glyph">Χχ</span><span class="meta"><span class="latin"><span class="name">CHI</span><span class="ipa">[kʰ]</span></span><span class="greek">χεῖ</span></span></a><a class="cell" href="/psi/" data-id="psi"><span class="glyph">Ψψ</span><span class="meta"><span class="latin"><span class="name">PSI</span><span class="ipa">[ps]</span></span><span class="greek">ψεῖ</span></span></a><a class="cell" href="/omega/" data-id="omega"><span class="glyph">Ωω</span><span class="meta"><span class="latin"><span class="name">OMEGA</span><span class="ipa">[ɔː]</span></span><span class="greek">ὦ μέγα</span></span></a></div>
+      </section>
     </div>
   </main>
 
-  <!-- Modal (overlay) -->
+  <!-- Modal da letra (o script.js preenche ao clicar). -->
   <div class="backdrop" id="backdrop" hidden>
     <div class="modal" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
-      <button class="close" id="closeBtn" type="button" aria-label="Close">
-        <svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M6 6l12 12M18 6 6 18"/></svg>
-      </button>
-
+      <button class="close" id="closeBtn" type="button" aria-label="Close"><svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M6 6l12 12M18 6 6 18"/></svg></button>
       <div class="modal-head">
-        <div class="big-glyph" id="bigGlyph">Αα</div>
+        <div class="big-glyph" id="bigGlyph"></div>
         <div class="head-meta">
-          <h2 class="modal-title" id="modalTitle">ALPHA</h2>
-          <div class="modal-sub" id="modalSub">ἄλφα · [a]</div>
+          <h2 class="modal-title" id="modalTitle"></h2>
+          <div class="modal-sub" id="modalSub"></div>
         </div>
       </div>
-
       <div class="modal-body" id="modalBody"></div>
+      <p class="modal-more"><a id="modalLink" href="#"></a></p>
+    </div>
+  </div>
+
+  <div class="backdrop" id="quizBackdrop" hidden>
+    <div class="modal quiz" role="dialog" aria-modal="true" aria-labelledby="quizTitle">
+      <button class="close" id="quizClose" type="button" aria-label="Close"><svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M6 6l12 12M18 6 6 18"/></svg></button>
+      <h2 class="modal-title" id="quizTitle">QUIZ</h2>
+      <div class="quiz-modes" role="group" id="quizModes">
+        <button type="button" data-mode="glyph" aria-pressed="true">Glyph → name</button>
+        <button type="button" data-mode="name" aria-pressed="false">Name → glyph</button>
+        <button type="button" data-mode="pairs" aria-pressed="false">Look-alikes</button>
+      </div>
+      <p class="quiz-ask" id="quizAsk"></p>
+      <div class="quiz-prompt" id="quizPrompt"></div>
+      <div class="quiz-options" id="quizOptions"></div>
+      <p class="quiz-feedback" id="quizFeedback" aria-live="polite"></p>
+      <div class="quiz-foot">
+        <span class="quiz-score" id="quizScore"></span>
+        <button type="button" class="quiz-next" id="quizNext">Next</button>
+      </div>
+      <p class="quiz-review" id="quizReview"></p>
     </div>
   </div>
 
   <footer class="site-footer">
     <div class="site-footer-inner">
+      <a class="footer-sheet" href="/cheat-sheet/">Cheat sheet (print / PDF)</a>
       <small>© 2026 greekalpha.bet — <a href="https://github.com/greekalpha-bet/greekalpha.bet/blob/main/LICENSE">MIT License</a></small>
       <div class="powered-by">
         <span class="powered-text"><strong>Powered</strong> by</span>
-        <img src="assets/mk-logo-white-300x.png" alt="MK" class="powered-by-logo" width="61" height="20" />
+        <img src="/assets/mk-logo-white-300x.png" alt="MK" class="powered-by-logo" width="61" height="20" />
       </div>
     </div>
   </footer>
-
-  <script src="./script.js?v=3"></script>
+  <script src="/data.js?v=8"></script>
+  <script src="/script.js?v=8"></script>
 </body>
 </html>

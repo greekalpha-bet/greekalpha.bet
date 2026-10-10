@@ -1,0 +1,159 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Alfabeto Grego — Estude e Memorize as Letras Gregas para Exatas | greekalpha.bet</title>
+  <meta name="description" content="Ferramenta interativa para estudar o alfabeto grego em exatas: glifos, pronúncia, LaTeX e os usos comuns em matemática e estatística, com um quiz para praticar." />
+  <link rel="canonical" href="https://greekalpha.bet/pt/" />
+  <link rel="alternate" hreflang="pt-BR" href="https://greekalpha.bet/pt/" />
+  <link rel="alternate" hreflang="en" href="https://greekalpha.bet/" />
+  <link rel="alternate" hreflang="x-default" href="https://greekalpha.bet/" />
+  <meta name="theme-color" content="#0b0e14" />
+
+  <meta property="og:type" content="website" />
+  <meta property="og:title" content="Alfabeto Grego — Estude e Memorize as Letras Gregas para Exatas | greekalpha.bet" />
+  <meta property="og:description" content="Ferramenta interativa para estudar o alfabeto grego em exatas: glifos, pronúncia, LaTeX e os usos comuns em matemática e estatística, com um quiz para praticar." />
+  <meta property="og:url" content="https://greekalpha.bet/pt/" />
+  <meta property="og:site_name" content="greekalpha.bet" />
+  <meta property="og:locale" content="pt_BR" />
+  <meta property="og:image" content="https://greekalpha.bet/assets/social-card.png" />
+  <meta property="og:image:width" content="1200" />
+  <meta property="og:image:height" content="630" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="Alfabeto Grego — Estude e Memorize as Letras Gregas para Exatas | greekalpha.bet" />
+  <meta name="twitter:description" content="Ferramenta interativa para estudar o alfabeto grego em exatas: glifos, pronúncia, LaTeX e os usos comuns em matemática e estatística, com um quiz para praticar." />
+  <meta name="twitter:image" content="https://greekalpha.bet/assets/social-card.png" />
+
+  <!-- Tema antes de qualquer pintura (sem piscar escuro no tema claro). -->
+  <script>
+    (function () {
+      var t = null;
+      try { t = localStorage.getItem('theme'); } catch (e) {}
+      if (t !== 'light' && t !== 'dark') t = matchMedia('(prefers-color-scheme: light)').matches ? 'light' : 'dark';
+      if (t === 'light') document.documentElement.setAttribute('data-theme', 'light');
+    })();
+  </script>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600&family=GFS+Didot:ital@0;1&family=Inter:wght@400;600&display=swap" rel="stylesheet">
+  <link rel="icon" href="/assets/favicon.png" type="image/png">
+  <link rel="apple-touch-icon" href="/assets/icon-180.png">
+  <link rel="manifest" href="/manifest.webmanifest">
+  <link rel="stylesheet" href="/style.css?v=8" />
+
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-LGW2XK4ZKC"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-LGW2XK4ZKC');
+  </script>
+
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@graph": [
+      {
+        "@type": "WebSite",
+        "@id": "https://greekalpha.bet/#website",
+        "url": "https://greekalpha.bet/",
+        "name": "greekalpha.bet"
+      },
+      {
+        "@type": "WebPage",
+        "@id": "https://greekalpha.bet/pt/#webpage",
+        "url": "https://greekalpha.bet/pt/",
+        "name": "Alfabeto Grego — Estude e Memorize as Letras Gregas para Exatas",
+        "description": "Ferramenta interativa para estudar o alfabeto grego em exatas: glifos, pronúncia, LaTeX e os usos comuns em matemática e estatística, com um quiz para praticar.",
+        "inLanguage": "pt-BR",
+        "isPartOf": {
+          "@id": "https://greekalpha.bet/#website"
+        }
+      }
+    ]
+  }
+  </script>
+</head>
+<body>
+  <div class="toolbar">
+    <button id="quizBtn" class="ui-top-btn quiz-btn" type="button" aria-label="Praticar: quiz" title="Praticar: quiz">Quiz</button>
+    <button id="themeToggle" class="ui-top-btn" type="button" aria-pressed="false" aria-label="Alternar tema" title="Alternar tema"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9" fill="none" stroke="currentColor" stroke-width="2"/><path d="M12 3a9 9 0 0 1 0 18z" fill="currentColor"/></svg></button>
+    <button id="audioBtn" class="ui-top-btn" type="button" aria-pressed="false" aria-label="Ouvir a pronúncia do alfabeto" title="Ouvir a pronúncia do alfabeto"><svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 5 6 9H2v6h4l5 4z" fill="currentColor"/><path d="M15.5 8.5a5 5 0 0 1 0 7"/><path d="M19 5a10 10 0 0 1 0 14"/></svg></button>
+    <button id="printBtn" class="ui-top-btn" type="button" aria-label="Imprimir" title="Imprimir"><svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9V2h12v7"/><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/><path d="M6 14h12v8H6z"/></svg></button>
+    <div class="lang">
+      <button id="langToggle" class="ui-top-btn" type="button" aria-haspopup="true" aria-expanded="false" aria-controls="langMenu" aria-label="Idioma" title="Idioma"><svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M2 12h20"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg></button>
+      <div id="langMenu" class="lang-menu" hidden>
+        <a class="lang-item" href="/" hreflang="en" lang="en" data-lang="en">English (EN)</a>
+        <span class="lang-item is-current" aria-current="true">Português (PT)</span>
+      </div>
+    </div>
+  </div>
+
+  <main class="wrap">
+    <h1 class="visually-hidden">Alfabeto grego</h1>
+    <div class="stage">
+      <section class="chart" id="chart" aria-label="Tabela do alfabeto grego">
+        <div class="row"><a class="cell" href="/pt/alfa/" data-id="alpha"><span class="glyph">Αα</span><span class="meta"><span class="latin"><span class="name">ALFA</span><span class="ipa">[a]</span></span><span class="greek">ἄλφα</span></span></a><a class="cell" href="/pt/beta/" data-id="beta"><span class="glyph">Ββ</span><span class="meta"><span class="latin"><span class="name">BETA</span><span class="ipa">[b]</span></span><span class="greek">βῆτα</span></span></a><a class="cell" href="/pt/gama/" data-id="gamma"><span class="glyph">Γγ</span><span class="meta"><span class="latin"><span class="name">GAMA</span><span class="ipa">[g]</span></span><span class="greek">γάμμα</span></span></a><a class="cell" href="/pt/delta/" data-id="delta"><span class="glyph">Δδ</span><span class="meta"><span class="latin"><span class="name">DELTA</span><span class="ipa">[d]</span></span><span class="greek">δέλτα</span></span></a><a class="cell" href="/pt/epsilon/" data-id="epsilon"><span class="glyph">Εε</span><span class="meta"><span class="latin"><span class="name">ÉPSILON</span><span class="ipa">[e]</span></span><span class="greek">ἐ ψιλόν</span></span></a><a class="cell" href="/pt/zeta/" data-id="zeta"><span class="glyph">Ζζ</span><span class="meta"><span class="latin"><span class="name">ZETA</span><span class="ipa">[dz]</span></span><span class="greek">ζῆτα</span></span></a></div>
+        <div class="rule"></div>
+        <div class="row"><a class="cell" href="/pt/eta/" data-id="eta"><span class="glyph">Ηη</span><span class="meta"><span class="latin"><span class="name">ETA</span><span class="ipa">[ɛː]</span></span><span class="greek">ἦτα</span></span></a><a class="cell" href="/pt/teta/" data-id="theta"><span class="glyph">Θθ</span><span class="meta"><span class="latin"><span class="name">TETA</span><span class="ipa">[tʰ]</span></span><span class="greek">θῆτα</span></span></a><a class="cell" href="/pt/iota/" data-id="iota"><span class="glyph">Ιι</span><span class="meta"><span class="latin"><span class="name">IOTA</span><span class="ipa">[i]</span></span><span class="greek">ἰῶτα</span></span></a><a class="cell" href="/pt/capa/" data-id="kappa"><span class="glyph">Κκ</span><span class="meta"><span class="latin"><span class="name">CAPA</span><span class="ipa">[k]</span></span><span class="greek">κάππα</span></span></a><a class="cell" href="/pt/lambda/" data-id="lambda"><span class="glyph">Λλ</span><span class="meta"><span class="latin"><span class="name">LAMBDA</span><span class="ipa">[l]</span></span><span class="greek">λάμβδα</span></span></a><a class="cell" href="/pt/mi/" data-id="mu"><span class="glyph">Μμ</span><span class="meta"><span class="latin"><span class="name">MI</span><span class="ipa">[m]</span></span><span class="greek">μῦ</span></span></a></div>
+        <div class="rule"></div>
+        <div class="row"><a class="cell" href="/pt/ni/" data-id="nu"><span class="glyph">Νν</span><span class="meta"><span class="latin"><span class="name">NI</span><span class="ipa">[n]</span></span><span class="greek">νῦ</span></span></a><a class="cell" href="/pt/csi/" data-id="xi"><span class="glyph">Ξξ</span><span class="meta"><span class="latin"><span class="name">CSI</span><span class="ipa">[ks]</span></span><span class="greek">ξεῖ</span></span></a><a class="cell" href="/pt/omicron/" data-id="omicron"><span class="glyph">Οο</span><span class="meta"><span class="latin"><span class="name">ÔMICRON</span><span class="ipa">[o]</span></span><span class="greek">ὂ μικρόν</span></span></a><a class="cell" href="/pt/pi/" data-id="pi"><span class="glyph">Ππ</span><span class="meta"><span class="latin"><span class="name">PI</span><span class="ipa">[p]</span></span><span class="greek">πεῖ</span></span></a><a class="cell" href="/pt/ro/" data-id="rho"><span class="glyph">Ρρ</span><span class="meta"><span class="latin"><span class="name">RÔ</span><span class="ipa">[r]</span></span><span class="greek">ῥῶ</span></span></a><a class="cell" href="/pt/sigma/" data-id="sigma"><span class="glyph">Σσς</span><span class="meta"><span class="latin"><span class="name">SIGMA</span><span class="ipa">[s]</span></span><span class="greek">σίγμα</span></span></a></div>
+        <div class="rule"></div>
+        <div class="row"><a class="cell" href="/pt/tau/" data-id="tau"><span class="glyph">Ττ</span><span class="meta"><span class="latin"><span class="name">TAU</span><span class="ipa">[t]</span></span><span class="greek">ταῦ</span></span></a><a class="cell" href="/pt/upsilon/" data-id="upsilon"><span class="glyph">Υυ</span><span class="meta"><span class="latin"><span class="name">ÚPSILON</span><span class="ipa">[u]</span></span><span class="greek">ὖ ψιλόν</span></span></a><a class="cell" href="/pt/fi/" data-id="phi"><span class="glyph">Φφ</span><span class="meta"><span class="latin"><span class="name">FI</span><span class="ipa">[pʰ]</span></span><span class="greek">φεῖ</span></span></a><a class="cell" href="/pt/qui/" data-id="chi"><span class="glyph">Χχ</span><span class="meta"><span class="latin"><span class="name">QUI</span><span class="ipa">[kʰ]</span></span><span class="greek">χεῖ</span></span></a><a class="cell" href="/pt/psi/" data-id="psi"><span class="glyph">Ψψ</span><span class="meta"><span class="latin"><span class="name">PSI</span><span class="ipa">[ps]</span></span><span class="greek">ψεῖ</span></span></a><a class="cell" href="/pt/omega/" data-id="omega"><span class="glyph">Ωω</span><span class="meta"><span class="latin"><span class="name">ÔMEGA</span><span class="ipa">[ɔː]</span></span><span class="greek">ὦ μέγα</span></span></a></div>
+      </section>
+    </div>
+  </main>
+
+  <!-- Modal da letra (o script.js preenche ao clicar). -->
+  <div class="backdrop" id="backdrop" hidden>
+    <div class="modal" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
+      <button class="close" id="closeBtn" type="button" aria-label="Fechar"><svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M6 6l12 12M18 6 6 18"/></svg></button>
+      <div class="modal-head">
+        <div class="big-glyph" id="bigGlyph"></div>
+        <div class="head-meta">
+          <h2 class="modal-title" id="modalTitle"></h2>
+          <div class="modal-sub" id="modalSub"></div>
+        </div>
+      </div>
+      <div class="modal-body" id="modalBody"></div>
+      <p class="modal-more"><a id="modalLink" href="#"></a></p>
+    </div>
+  </div>
+
+  <div class="backdrop" id="quizBackdrop" hidden>
+    <div class="modal quiz" role="dialog" aria-modal="true" aria-labelledby="quizTitle">
+      <button class="close" id="quizClose" type="button" aria-label="Fechar"><svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M6 6l12 12M18 6 6 18"/></svg></button>
+      <h2 class="modal-title" id="quizTitle">QUIZ</h2>
+      <div class="quiz-modes" role="group" id="quizModes">
+        <button type="button" data-mode="glyph" aria-pressed="true">Glifo → nome</button>
+        <button type="button" data-mode="name" aria-pressed="false">Nome → glifo</button>
+        <button type="button" data-mode="pairs" aria-pressed="false">Parecidas</button>
+      </div>
+      <p class="quiz-ask" id="quizAsk"></p>
+      <div class="quiz-prompt" id="quizPrompt"></div>
+      <div class="quiz-options" id="quizOptions"></div>
+      <p class="quiz-feedback" id="quizFeedback" aria-live="polite"></p>
+      <div class="quiz-foot">
+        <span class="quiz-score" id="quizScore"></span>
+        <button type="button" class="quiz-next" id="quizNext">Próxima</button>
+      </div>
+      <p class="quiz-review" id="quizReview"></p>
+    </div>
+  </div>
+
+  <footer class="site-footer">
+    <div class="site-footer-inner">
+      <a class="footer-sheet" href="/pt/folha/">Folha de referência (imprimir / PDF)</a>
+      <small>© 2026 greekalpha.bet — <a href="https://github.com/greekalpha-bet/greekalpha.bet/blob/main/LICENSE">MIT License</a></small>
+      <div class="powered-by">
+        <span class="powered-text"><strong>Powered</strong> by</span>
+        <img src="/assets/mk-logo-white-300x.png" alt="MK" class="powered-by-logo" width="61" height="20" />
+      </div>
+    </div>
+  </footer>
+  <script src="/data.js?v=8"></script>
+  <script src="/script.js?v=8"></script>
+</body>
+</html>
