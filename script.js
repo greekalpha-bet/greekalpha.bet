@@ -1,9 +1,10 @@
 /* greekalpha.bet — a tabela do alfabeto grego.
 
    Os dados ficam no topo: `data` são as 24 letras (glifo, nome, pronúncia
-   e grafia grega) e `uses`, os usos comuns de cada uma em matemática,
-   probabilidade e estatística, em inglês e português. O resto, abaixo,
-   é a interface. */
+   e grafia grega); `uses`, os usos comuns de cada uma em matemática,
+   probabilidade e estatística, em inglês e português; `writing`, como
+   escrever cada uma (Unicode, LaTeX, HTML); e `confusables`, as perguntas
+   do quiz sobre letras que se confundem. O resto, abaixo, é a interface. */
 
 const data = [
   { id:"alpha",   glyph:"Αα", name:"ALPHA",   ipa:"[a]",  greek:"ἄλφα" },
@@ -327,6 +328,87 @@ const uses = {
   }
 };
 
+/* Como escrever cada letra: [caractere, comando LaTeX, entidade HTML].
+   `lo` traz a minúscula e, quando há, a variante de forma; `up`, a
+   maiúscula. Maiúsculas iguais às latinas não têm comando em LaTeX: lá
+   se usa a letra latina (A, B, E…), e `latin` marca isso. Atenção a dois
+   pares: em LaTeX, \epsilon dá ϵ e \varepsilon dá ε; \phi dá ϕ e
+   \varphi dá φ (o contrário do que muita gente espera). */
+const writing = {
+  alpha:   { lo: [["α", "\\alpha", "&alpha;"]], up: ["Α", "A", "&Alpha;", "latin"] },
+  beta:    { lo: [["β", "\\beta", "&beta;"]], up: ["Β", "B", "&Beta;", "latin"] },
+  gamma:   { lo: [["γ", "\\gamma", "&gamma;"]], up: ["Γ", "\\Gamma", "&Gamma;"] },
+  delta:   { lo: [["δ", "\\delta", "&delta;"]], up: ["Δ", "\\Delta", "&Delta;"] },
+  epsilon: { lo: [["ε", "\\varepsilon", "&epsilon;"], ["ϵ", "\\epsilon", "&epsiv;"]], up: ["Ε", "E", "&Epsilon;", "latin"] },
+  zeta:    { lo: [["ζ", "\\zeta", "&zeta;"]], up: ["Ζ", "Z", "&Zeta;", "latin"] },
+  eta:     { lo: [["η", "\\eta", "&eta;"]], up: ["Η", "H", "&Eta;", "latin"] },
+  theta:   { lo: [["θ", "\\theta", "&theta;"], ["ϑ", "\\vartheta", "&thetav;"]], up: ["Θ", "\\Theta", "&Theta;"] },
+  iota:    { lo: [["ι", "\\iota", "&iota;"]], up: ["Ι", "I", "&Iota;", "latin"] },
+  kappa:   { lo: [["κ", "\\kappa", "&kappa;"], ["ϰ", "\\varkappa", "&kappav;"]], up: ["Κ", "K", "&Kappa;", "latin"] },
+  lambda:  { lo: [["λ", "\\lambda", "&lambda;"]], up: ["Λ", "\\Lambda", "&Lambda;"] },
+  mu:      { lo: [["μ", "\\mu", "&mu;"]], up: ["Μ", "M", "&Mu;", "latin"] },
+  nu:      { lo: [["ν", "\\nu", "&nu;"]], up: ["Ν", "N", "&Nu;", "latin"] },
+  xi:      { lo: [["ξ", "\\xi", "&xi;"]], up: ["Ξ", "\\Xi", "&Xi;"] },
+  omicron: { lo: [["ο", "o", "&omicron;"]], up: ["Ο", "O", "&Omicron;", "latin"] },
+  pi:      { lo: [["π", "\\pi", "&pi;"], ["ϖ", "\\varpi", "&piv;"]], up: ["Π", "\\Pi", "&Pi;"] },
+  rho:     { lo: [["ρ", "\\rho", "&rho;"], ["ϱ", "\\varrho", "&rhov;"]], up: ["Ρ", "P", "&Rho;", "latin"] },
+  sigma:   { lo: [["σ", "\\sigma", "&sigma;"], ["ς", "\\varsigma", "&sigmaf;"]], up: ["Σ", "\\Sigma", "&Sigma;"] },
+  tau:     { lo: [["τ", "\\tau", "&tau;"]], up: ["Τ", "T", "&Tau;", "latin"] },
+  upsilon: { lo: [["υ", "\\upsilon", "&upsilon;"]], up: ["Υ", "\\Upsilon", "&Upsilon;"] },
+  phi:     { lo: [["φ", "\\varphi", "&phi;"], ["ϕ", "\\phi", "&phiv;"]], up: ["Φ", "\\Phi", "&Phi;"] },
+  chi:     { lo: [["χ", "\\chi", "&chi;"]], up: ["Χ", "X", "&Chi;", "latin"] },
+  psi:     { lo: [["ψ", "\\psi", "&psi;"]], up: ["Ψ", "\\Psi", "&Psi;"] },
+  omega:   { lo: [["ω", "\\omega", "&omega;"]], up: ["Ω", "\\Omega", "&Omega;"] },
+};
+
+/* Quiz, modo "pares que confundem": a resposta é sempre a primeira opção
+   (a ordem na tela é sorteada). Só entram pares que dá para distinguir à
+   vista — ο e o, por exemplo, são idênticos e ficaram de fora. */
+const confusables = [
+  { ask: { "en": "Which one is the Greek nu?", "pt-BR": "Qual é o nu grego?" }, options: ["ν", "v", "υ", "γ"],
+    why: { "en": "ν (nu) is angular, with the right stroke taller; the Latin v is symmetrical; υ (upsilon) is round at the bottom; γ (gamma) drops below the line.",
+           "pt-BR": "ν (nu) é anguloso, com o traço da direita mais alto; o v latino é simétrico; υ (upsilon) é redondo embaixo; γ (gama) desce abaixo da linha." } },
+  { ask: { "en": "Which one is the Greek upsilon?", "pt-BR": "Qual é o upsilon grego?" }, options: ["υ", "u", "ν", "v"],
+    why: { "en": "υ is round at the bottom and open at the top, without the little tail of the Latin u.",
+           "pt-BR": "υ é redondo embaixo e aberto em cima, sem a perninha do u latino." } },
+  { ask: { "en": "Which one is the Greek rho?", "pt-BR": "Qual é o rô grego?" }, options: ["ρ", "p", "φ", "β"],
+    why: { "en": "In ρ the stem grows out of the bowl in one curve; the Latin p has a separate straight stem.",
+           "pt-BR": "No ρ a haste nasce da própria curva, num traço só; o p latino tem uma haste reta à parte." } },
+  { ask: { "en": "Which one is the Greek chi?", "pt-BR": "Qual é o qui grego?" }, options: ["χ", "x", "κ", "λ"],
+    why: { "en": "χ drops below the baseline and its strokes curve; the Latin x sits on the line.",
+           "pt-BR": "χ desce abaixo da linha e tem os traços curvos; o x latino fica apoiado na linha." } },
+  { ask: { "en": "Which one is the Greek eta?", "pt-BR": "Qual é o eta grego?" }, options: ["η", "n", "μ", "ν"],
+    why: { "en": "η has a right leg that drops below the baseline; the Latin n doesn't.",
+           "pt-BR": "η tem a perna da direita descendo abaixo da linha; o n latino não." } },
+  { ask: { "en": "Which one is the Greek omega?", "pt-BR": "Qual é o ômega grego?" }, options: ["ω", "w", "ϖ", "π"],
+    why: { "en": "ω is round, like two u's joined; the Latin w is angular; ϖ is the variant pi, with a bar on top.",
+           "pt-BR": "ω é arredondado, como dois u colados; o w latino é anguloso; ϖ é a variante do pi, com uma barra em cima." } },
+  { ask: { "en": "Which one is the Greek iota?", "pt-BR": "Qual é o iota grego?" }, options: ["ι", "i", "l", "ı"],
+    why: { "en": "ι (iota) is short and has no dot; ı is the Turkish dotless i, a Latin letter.",
+           "pt-BR": "ι (iota) é curto e sem pingo; ı é o i sem pingo do turco, uma letra latina." } },
+  { ask: { "en": "Which one is the Greek kappa?", "pt-BR": "Qual é o capa grego?" }, options: ["κ", "k", "χ", "x"],
+    why: { "en": "κ fits in the height of lowercase letters; the Latin k has a tall ascender.",
+           "pt-BR": "κ cabe na altura das minúsculas; o k latino tem a haste alta." } },
+  { ask: { "en": "Which one is zeta?", "pt-BR": "Qual é o zeta?" }, options: ["ζ", "ξ", "ς", "γ"],
+    why: { "en": "ζ has a single turn before the tail; ξ has two; ς is the final sigma.",
+           "pt-BR": "ζ tem uma volta só antes da cauda; ξ tem duas; ς é o sigma final." } },
+  { ask: { "en": "Which one is xi?", "pt-BR": "Qual é o xi?" }, options: ["ξ", "ζ", "ε", "ς"],
+    why: { "en": "ξ has two turns stacked before the tail — like a 3 with a tail; ζ has only one.",
+           "pt-BR": "ξ tem duas voltas empilhadas antes da cauda, como um 3 com rabo; ζ tem uma só." } },
+  { ask: { "en": "Which one is the “element of” symbol (not a letter)?", "pt-BR": "Qual é o símbolo de “pertence a” (não a letra)?" }, options: ["∈", "ε", "ϵ", "€"],
+    why: { "en": "∈ (element of, \\in in LaTeX) is a symbol of its own, derived from the lunate epsilon ϵ.",
+           "pt-BR": "∈ (pertence, \\in em LaTeX) é um símbolo à parte, derivado do epsilon lunado ϵ." } },
+  { ask: { "en": "Which one is the summation operator (not the letter)?", "pt-BR": "Qual é o operador de somatório (não a letra)?" }, options: ["∑", "Σ", "Ε", "∏"],
+    why: { "en": "∑ (U+2211, \\sum) is the operator, larger and with more air; Σ (U+03A3) is the letter. Copied as text, they are different characters.",
+           "pt-BR": "∑ (U+2211, \\sum) é o operador, maior e mais espaçado; Σ (U+03A3) é a letra. Copiados como texto, são caracteres diferentes." } },
+  { ask: { "en": "Which one is the shape written with \\varphi?", "pt-BR": "Qual é a forma escrita com \\varphi?" }, options: ["φ", "ϕ", "ψ", "θ"],
+    why: { "en": "\\varphi gives the open, loopy φ; \\phi gives ϕ, with a straight stroke through a closed circle.",
+           "pt-BR": "\\varphi dá o φ aberto, em laço; \\phi dá ϕ, com um traço reto atravessando um círculo fechado." } },
+  { ask: { "en": "Which one is \\vartheta?", "pt-BR": "Qual é o \\vartheta?" }, options: ["ϑ", "θ", "δ", "ϕ"],
+    why: { "en": "ϑ is the cursive theta, open at the top right; θ is the closed oval with a bar.",
+           "pt-BR": "ϑ é o teta cursivo, aberto em cima à direita; θ é o oval fechado com uma barra." } },
+];
+
 /* ======================================================================
    Interface. Tudo fica dentro de uma função, sem variáveis globais.
    ====================================================================== */
@@ -347,6 +429,26 @@ const uses = {
       audioStop: "Stop the pronunciation",
       print: "Print",
       language: "Language",
+      quiz: "Practice: quiz",
+      copy: "Copy",
+      copied: "Copied",
+      howToWrite: "HOW TO WRITE IT — click to copy",
+      lower: "lowercase",
+      variant: "variant",
+      upper: "uppercase",
+      latinUpper: "same as the Latin letter: LaTeX has no command for it",
+      modeGlyph: "Glyph → name",
+      modeName: "Name → glyph",
+      modePairs: "Look-alikes",
+      whichLetter: "Which letter is this?",
+      whichGlyph: "Find this letter:",
+      right: "Right!",
+      wrong: "Not quite.",
+      wrongIs: "It's",
+      youChose: "You picked",
+      next: "Next",
+      review: "To review:",
+      score: (r, n, s, b) => `${r}/${n} right · streak ${s} · best ${b}`,
     },
     "pt-BR": {
       blockMath: "MATEMÁTICA",
@@ -361,6 +463,26 @@ const uses = {
       audioStop: "Parar a pronúncia",
       print: "Imprimir",
       language: "Idioma",
+      quiz: "Praticar: quiz",
+      copy: "Copiar",
+      copied: "Copiado",
+      howToWrite: "COMO ESCREVER — clique para copiar",
+      lower: "minúscula",
+      variant: "variante",
+      upper: "maiúscula",
+      latinUpper: "igual à letra latina: o LaTeX não tem comando para ela",
+      modeGlyph: "Glifo → nome",
+      modeName: "Nome → glifo",
+      modePairs: "Parecidas",
+      whichLetter: "Que letra é esta?",
+      whichGlyph: "Encontre esta letra:",
+      right: "Isso!",
+      wrong: "Quase.",
+      wrongIs: "É",
+      youChose: "Você marcou",
+      next: "Próxima",
+      review: "Para revisar:",
+      score: (r, n, s, b) => `${r}/${n} acertos · sequência ${s} · recorde ${b}`,
     },
   };
 
@@ -409,7 +531,10 @@ const uses = {
     label(langToggle, t("language"));
     label(audioBtn, audioBtn.getAttribute("aria-pressed") === "true" ? t("audioStop") : t("audioPlay"));
     langMenu.querySelectorAll(".lang-item").forEach(b => b.setAttribute("aria-checked", String(b.dataset.lang === lang)));
-    if (!backdrop.hidden && current) fillModal(current); // o modal aberto troca de língua junto
+    labelQuiz();
+    // Os diálogos abertos trocam de língua junto.
+    if (current && letterDialog.open) fillModal(current);
+    if (quizDialog.open) newQuestion();
   }
 
   function closeMenu(focusToggle) {
@@ -502,9 +627,102 @@ const uses = {
     fitPending = requestAnimationFrame(fitToScreen);
   };
 
-  /* ---------------------------------------------------------- modal */
+  /* ---------------------------------------------------------- diálogos */
 
-  let current = null, lastFocus = null;
+  // O comportamento comum ao modal da letra e ao quiz: o foco entra ao
+  // abrir, não sai com Tab, Esc e o clique fora fecham, e ao fechar o foco
+  // volta para onde estava.
+  function makeDialog(backdropEl, onClose) {
+    const box = backdropEl.querySelector(".modal");
+    let lastFocus = null;
+    const api = {
+      get open() { return !backdropEl.hidden; },
+      show(focusEl) {
+        if (backdropEl.hidden) lastFocus = document.activeElement;
+        backdropEl.hidden = false;
+        document.body.classList.add("modal-open");
+        (focusEl || box.querySelector(".close")).focus();
+      },
+      hide() {
+        if (backdropEl.hidden) return;
+        backdropEl.hidden = true;
+        document.body.classList.remove("modal-open");
+        if (onClose) onClose();
+        if (lastFocus) lastFocus.focus();
+      },
+    };
+    box.querySelector(".close").addEventListener("click", () => api.hide());
+    backdropEl.addEventListener("click", e => { if (e.target === backdropEl) api.hide(); });
+    document.addEventListener("keydown", e => {
+      if (!api.open) return;
+      if (e.key === "Escape") return api.hide();
+      if (e.key === "Tab") {
+        const f = [...box.querySelectorAll("button:not([disabled]), [href], [tabindex]:not([tabindex='-1'])")];
+        const first = f[0], last = f[f.length - 1];
+        if (e.shiftKey && document.activeElement === first) { e.preventDefault(); last.focus(); }
+        else if (!e.shiftKey && document.activeElement === last) { e.preventDefault(); first.focus(); }
+      }
+    });
+    return api;
+  }
+
+  /* ---------------------------------------------------------- copiar */
+
+  async function copyText(text, btn) {
+    try {
+      await navigator.clipboard.writeText(text);
+    } catch (e) {
+      // Sem a API (http, navegador antigo): o caminho antigo, por seleção.
+      const ta = el("textarea");
+      ta.value = text;
+      ta.setAttribute("readonly", "");
+      ta.style.cssText = "position:fixed;opacity:0";
+      document.body.appendChild(ta);
+      ta.select();
+      document.execCommand("copy");
+      ta.remove();
+    }
+    btn.classList.add("is-copied");
+    btn.setAttribute("aria-label", `${t("copied")}: ${text}`);
+    clearTimeout(btn._t);
+    btn._t = setTimeout(() => {
+      btn.classList.remove("is-copied");
+      btn.setAttribute("aria-label", `${t("copy")}: ${text}`);
+    }, 1400);
+  }
+
+  function copyButton(text, cls) {
+    const b = el("button", `copy ${cls}`, text);
+    b.type = "button";
+    b.setAttribute("aria-label", `${t("copy")}: ${text}`);
+    b.addEventListener("click", () => copyText(text, b));
+    return b;
+  }
+
+  // Uma linha por forma: o caractere, o LaTeX e a entidade HTML, cada um
+  // num botão que copia.
+  function writingBlock(id) {
+    const w = writing[id];
+    if (!w) return null;
+    const box = el("section", "writing");
+    box.appendChild(el("h3", null, t("howToWrite")));
+    const table = el("div", "writing-rows");
+    const row = (labelText, [ch, tex, ent, latin]) => {
+      const r = el("div", "writing-row");
+      r.append(el("span", "writing-label", labelText), copyButton(ch, "is-char"), copyButton(tex, "is-tex"), copyButton(ent, "is-ent"));
+      if (latin) r.appendChild(el("span", "writing-hint", t("latinUpper")));
+      table.appendChild(r);
+    };
+    w.lo.forEach((f, i) => row(i ? t("variant") : t("lower"), f));
+    row(t("upper"), w.up);
+    box.appendChild(table);
+    return box;
+  }
+
+  /* ---------------------------------------------------------- modal da letra */
+
+  let current = null;
+  const letterDialog = makeDialog(backdrop, () => { current = null; });
 
   function block(title, items) {
     const b = el("section", "block");
@@ -523,38 +741,153 @@ const uses = {
       block(t("blockMath"), u.math),
       block(t("blockProb"), u.prob),
       block(t("blockStats"), u.stats),
+      writingBlock(item.id) || "",
       el("p", "note", t("note")));
   }
 
   function openModal(item) {
     current = item;
-    lastFocus = document.activeElement;
     fillModal(item);
-    backdrop.hidden = false;
-    document.body.classList.add("modal-open");
-    closeBtn.focus();
+    letterDialog.show(closeBtn);
+  }
+  const closeModal = () => letterDialog.hide();
+
+  /* ---------------------------------------------------------- quiz */
+
+  // Peso de cada letra: errar aumenta, acertar diminui, e as mais pesadas
+  // são sorteadas mais vezes. Fica no navegador, entre visitas.
+  const quizEls = {
+    modes: $("quizModes"), ask: $("quizAsk"), prompt: $("quizPrompt"), options: $("quizOptions"),
+    feedback: $("quizFeedback"), score: $("quizScore"), next: $("quizNext"), review: $("quizReview"),
+  };
+  const quiz = {
+    mode: ["glyph", "name", "pairs"].includes(store.get("quizMode")) ? store.get("quizMode") : "glyph",
+    weights: (() => { try { return JSON.parse(store.get("quizWeights")) || {}; } catch (e) { return {}; } })(),
+    best: Number(store.get("quizBest")) || 0,
+    right: 0, total: 0, streak: 0, q: null, last: null,
+  };
+  const quizDialog = makeDialog($("quizBackdrop"));
+  const byId = Object.fromEntries(data.map(d => [d.id, d]));
+  const lower = item => item.glyph[1];
+  const nice = name => name[0] + name.slice(1).toLowerCase();
+  const shuffle = xs => { const a = [...xs]; for (let i = a.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [a[i], a[j]] = [a[j], a[i]]; } return a; };
+  const weight = id => quiz.weights[id] || 1;
+
+  function pickLetter() {
+    const pool = data.filter(d => d.id !== quiz.last);
+    let r = Math.random() * pool.reduce((s, d) => s + weight(d.id), 0);
+    for (const d of pool) { r -= weight(d.id); if (r <= 0) return d; }
+    return pool[pool.length - 1];
   }
 
-  function closeModal() {
-    if (backdrop.hidden) return;
-    backdrop.hidden = true;
-    document.body.classList.remove("modal-open");
-    current = null;
-    if (lastFocus) lastFocus.focus();
-  }
-
-  closeBtn.addEventListener("click", closeModal);
-  backdrop.addEventListener("click", e => { if (e.target === backdrop) closeModal(); });
-  document.addEventListener("keydown", e => {
-    if (backdrop.hidden) return;
-    if (e.key === "Escape") return closeModal();
-    // O foco não sai do modal enquanto ele está aberto.
-    if (e.key === "Tab") {
-      const f = [...modal.querySelectorAll("button, [href], [tabindex]:not([tabindex='-1'])")];
-      const first = f[0], last = f[f.length - 1];
-      if (e.shiftKey && document.activeElement === first) { e.preventDefault(); last.focus(); }
-      else if (!e.shiftKey && document.activeElement === last) { e.preventDefault(); first.focus(); }
+  function newQuestion() {
+    quiz.answered = false;
+    quizEls.feedback.textContent = "";
+    quizEls.feedback.className = "quiz-feedback";
+    quizEls.next.hidden = true;
+    let q;
+    if (quiz.mode === "pairs") {
+      const pool = confusables.filter(c => c !== quiz.last);
+      const c = pool[Math.floor(Math.random() * pool.length)];
+      quiz.last = c;
+      q = { ask: c.ask[lang], prompt: "", options: shuffle(c.options), answer: c.options[0], why: c.why[lang], glyphOptions: true };
+    } else {
+      const item = pickLetter();
+      quiz.last = item.id;
+      const others = shuffle(data.filter(d => d.id !== item.id)).slice(0, 3);
+      const choices = shuffle([item, ...others]);
+      if (quiz.mode === "glyph") {
+        // Às vezes a maiúscula, mas em geral a minúscula, que confunde mais.
+        const ch = Math.random() < 0.3 ? item.glyph[0] : lower(item);
+        q = { ask: t("whichLetter"), prompt: ch, promptClass: "is-glyph", options: choices.map(d => nice(d.name)), answer: nice(item.name), item, choices };
+      } else {
+        q = { ask: t("whichGlyph"), prompt: nice(item.name), promptClass: "is-name", options: choices.map(lower), answer: lower(item), item, choices, glyphOptions: true };
+      }
     }
+    quiz.q = q;
+    quizEls.ask.textContent = q.ask;
+    quizEls.prompt.textContent = q.prompt;
+    quizEls.prompt.className = `quiz-prompt ${q.promptClass || ""}`;
+    quizEls.prompt.hidden = !q.prompt;
+    quizEls.options.replaceChildren(...q.options.map((text, i) => {
+      const b = el("button", `quiz-option${q.glyphOptions ? " is-glyph" : ""}`);
+      b.type = "button";
+      b.append(el("span", "quiz-key", String(i + 1)), el("span", null, text));
+      b.addEventListener("click", () => answer(i));
+      return b;
+    }));
+    renderScore();
+    quizEls.options.firstChild.focus();
+  }
+
+  function answer(i) {
+    const q = quiz.q;
+    if (quiz.answered) return;
+    quiz.answered = true;
+    const ok = q.options[i] === q.answer;
+    quiz.total++;
+    if (ok) { quiz.right++; quiz.streak++; } else quiz.streak = 0;
+    if (quiz.streak > quiz.best) { quiz.best = quiz.streak; store.set("quizBest", quiz.best); }
+    if (q.item) {
+      const w = weight(q.item.id);
+      quiz.weights[q.item.id] = ok ? Math.max(0.5, w * 0.6) : Math.min(8, w * 2 + 1);
+      store.set("quizWeights", JSON.stringify(quiz.weights));
+    }
+    [...quizEls.options.children].forEach((b, j) => {
+      b.disabled = true;
+      if (q.options[j] === q.answer) b.classList.add("is-right");
+      else if (j === i) b.classList.add("is-wrong");
+    });
+    let msg;
+    if (q.item) {
+      const it = q.item, tex = writing[it.id].lo[0][1];
+      msg = `${lower(it)} = ${nice(it.name)} · ${tex}`;
+      if (!ok) {
+        const chosen = q.choices[i];
+        msg = `${t("wrongIs")} ${lower(it)} = ${nice(it.name)}. ${t("youChose")} ${nice(chosen.name)} (${lower(chosen)}).`;
+      }
+    } else {
+      msg = q.why;
+    }
+    quizEls.feedback.textContent = `${ok ? t("right") : t("wrong")} ${msg}`;
+    quizEls.feedback.className = `quiz-feedback ${ok ? "is-right" : "is-wrong"}`;
+    renderScore();
+    quizEls.next.hidden = false;
+    quizEls.next.focus();
+  }
+
+  function renderScore() {
+    quizEls.score.textContent = t("score")(quiz.right, quiz.total, quiz.streak, quiz.best);
+    const weak = data.filter(d => weight(d.id) >= 2).sort((a, b) => weight(b.id) - weight(a.id)).slice(0, 6);
+    quizEls.review.textContent = weak.length ? `${t("review")} ${weak.map(lower).join("  ")}` : "";
+  }
+
+  function setMode(mode) {
+    quiz.mode = mode;
+    store.set("quizMode", mode);
+    quizEls.modes.querySelectorAll("button").forEach(b => b.setAttribute("aria-pressed", String(b.dataset.mode === mode)));
+    newQuestion();
+  }
+
+  function labelQuiz() {
+    const names = { glyph: t("modeGlyph"), name: t("modeName"), pairs: t("modePairs") };
+    quizEls.modes.querySelectorAll("button").forEach(b => { b.textContent = names[b.dataset.mode]; });
+    quizEls.next.textContent = t("next");
+    label($("quizClose"), t("close"));
+    label($("quizBtn"), t("quiz"));
+  }
+
+  $("quizBtn").addEventListener("click", () => {
+    if (letterDialog.open) letterDialog.hide();
+    quizDialog.show();
+    setMode(quiz.mode);
+  });
+  quizEls.modes.addEventListener("click", e => { const b = e.target.closest("button"); if (b) setMode(b.dataset.mode); });
+  quizEls.next.addEventListener("click", newQuestion);
+  document.addEventListener("keydown", e => {
+    if (!quizDialog.open || e.altKey || e.ctrlKey || e.metaKey) return;
+    const n = Number(e.key);
+    if (n >= 1 && n <= 4 && !quiz.answered) { e.preventDefault(); answer(n - 1); }
   });
 
   /* ---------------------------------------------------------- tema */

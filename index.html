@@ -45,7 +45,7 @@
   <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600&family=GFS+Didot:ital@0;1&family=Inter:wght@400;600&display=swap" rel="stylesheet">
 
   <link rel="icon" href="./assets/favicon.png" type="image/png">
-  <link rel="stylesheet" href="./style.css?v=3" />
+  <link rel="stylesheet" href="./style.css?v=4" />
 
   <!-- Google tag (gtag.js) -->
   <script async src="https://www.googletagmanager.com/gtag/js?id=G-LGW2XK4ZKC"></script>
@@ -86,6 +86,7 @@
        língua escolhida; os daqui valem sem JavaScript. Ícones em SVG com
        currentColor: seguem o tema sem filtros. -->
   <div class="toolbar">
+    <button id="quizBtn" class="ui-top-btn quiz-btn" type="button" aria-label="Practice: quiz" title="Practice: quiz">Quiz</button>
     <button id="themeToggle" class="ui-top-btn" type="button" aria-pressed="false" aria-label="Toggle theme" title="Toggle theme">
       <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9" fill="none" stroke="currentColor" stroke-width="2"/><path d="M12 3a9 9 0 0 1 0 18z" fill="currentColor"/></svg>
     </button>
@@ -131,6 +132,30 @@
     </div>
   </div>
 
+  <!-- Quiz: três modos, com as letras erradas voltando mais vezes. -->
+  <div class="backdrop" id="quizBackdrop" hidden>
+    <div class="modal quiz" role="dialog" aria-modal="true" aria-labelledby="quizTitle">
+      <button class="close" id="quizClose" type="button" aria-label="Close">
+        <svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M6 6l12 12M18 6 6 18"/></svg>
+      </button>
+      <h2 class="modal-title" id="quizTitle">QUIZ</h2>
+      <div class="quiz-modes" role="group" id="quizModes">
+        <button type="button" data-mode="glyph" aria-pressed="true">Glyph → name</button>
+        <button type="button" data-mode="name" aria-pressed="false">Name → glyph</button>
+        <button type="button" data-mode="pairs" aria-pressed="false">Look-alikes</button>
+      </div>
+      <p class="quiz-ask" id="quizAsk"></p>
+      <div class="quiz-prompt" id="quizPrompt"></div>
+      <div class="quiz-options" id="quizOptions"></div>
+      <p class="quiz-feedback" id="quizFeedback" aria-live="polite"></p>
+      <div class="quiz-foot">
+        <span class="quiz-score" id="quizScore"></span>
+        <button type="button" class="quiz-next" id="quizNext">Next</button>
+      </div>
+      <p class="quiz-review" id="quizReview"></p>
+    </div>
+  </div>
+
   <footer class="site-footer">
     <div class="site-footer-inner">
       <small>© 2026 greekalpha.bet — <a href="https://github.com/greekalpha-bet/greekalpha.bet/blob/main/LICENSE">MIT License</a></small>
@@ -141,6 +166,6 @@
     </div>
   </footer>
 
-  <script src="./script.js?v=3"></script>
+  <script src="./script.js?v=4"></script>
 </body>
 </html>
